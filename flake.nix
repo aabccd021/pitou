@@ -6,13 +6,13 @@
   outputs = { self, nixpkgs }: with nixpkgs.legacyPackages.x86_64-linux;
     {
       devShell.x86_64-linux = mkShellNoCC {
-        buildInputs = [ bun ];
+        buildInputs = [ nodejs bun ];
       };
 
       packages.x86_64-linux.default = buildNpmPackage {
         name = "my-package";
         src = ./.;
-        npmDepsHash = "sha256-Hzau5vU5q0+FlUhxp7nLKisgBTk3bMGZi0yAhFf9bIA=";
+        npmDepsHash = "sha256-alSzA+1eBokELdgCiOmIxn8/ThDkePoWaGowyWt4zPM=";
         buildPhase = ''
           ${bun}/bin/bun build src/index.ts --outfile ./dist/index.js
         '';
