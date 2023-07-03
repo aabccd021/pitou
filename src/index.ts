@@ -1,4 +1,5 @@
 import { pipe } from "fp-ts/lib/function"
+import {match} from 'ts-pattern';
 
 const plus = (b: number) => (a: number) => a + b
 
@@ -10,4 +11,6 @@ const result = pipe(
   minus(1),
 )
 
-console.log(result)
+const matched = match(result).with(3, () => 'three').otherwise(() => 'not three')
+
+console.log(matched);

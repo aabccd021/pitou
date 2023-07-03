@@ -8,7 +8,11 @@
 
       nodeModules = buildNpmPackage {
         name = "node_modules";
-        src = ./.;
+        src = builtins.path {
+          filter = path: type: baseNameOf path == "package-lock.json";
+          path = ./.;
+          name = "src";
+        };
         dontNpmBuild = true;
         npmDepsHash = builtins.readFile ./npmDepsHash.txt;
         installPhase = ''
@@ -17,11 +21,14 @@
         '';
       };
 
-      npmInstall = "ln -sfn ${nodeModules}/node_modules ./node_modules";
+      setupNodeModules = ''
+        ln -sfn ${nodeModules}/node_modules ./node_modules
+      '';
 
-      updateNpmHash = writeShellScriptBin "updateNpmHash" ''
-        npm install --package-lock-only
-        ${prefetch-npm-deps}/bin/prefetch-npm-deps package-lock.json
+      npm = writeShellScriptBin "npm" ''
+        unlink ./node_modules
+        ${nodejs}/bin/npm "$@" --package-lock-only
+        ${prefetch-npm-deps}/bin/prefetch-npm-deps package-lock.json > ./npmDepsHash.txt
         direnv reload
       '';
 
@@ -29,14 +36,14 @@
     {
 
       devShell.x86_64-linux = mkShellNoCC {
-        buildInputs = [ bun updateNpmHash ];
-        shellHook = npmInstall;
+        buildInputs = [ bun npm ];
+        shellHook = setupNodeModules;
       };
 
       packages.x86_64-linux.default = stdenv.mkDerivation {
         name = "my-package";
         src = ./.;
-        configurePhase = npmInstall;
+        configurePhase = setupNodeModules;
         buildPhase = "${bun}/bin/bun build src/index.ts --outfile ./dist/index.js";
         installPhase = ''
           mkdir $out
