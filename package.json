@@ -12,7 +12,6 @@
     "assert-never": "^1.2.1",
     "fp-ts": "^2.16.0",
     "io-ts": "^2.2.20",
-    "spectacles-ts": "^1.0.7",
-    "ts-pattern": "^5.0.1"
+    "spectacles-ts": "^1.0.7"
   }
 }
