@@ -11,6 +11,8 @@ const result = pipe(
   minus(1),
 )
 
-const matched = match(result).with(3, () => 'three').otherwise(() => 'not three')
+const matched = match(result)
+  .with(3, () => 'three')
+  .otherwise(() => 'not three')
 
 console.log(matched);

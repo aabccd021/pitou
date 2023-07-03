@@ -6,13 +6,15 @@
   outputs = { self, nixpkgs }: with nixpkgs.legacyPackages.x86_64-linux;
     let
 
+      packageLock = builtins.path {
+        filter = path: _: baseNameOf path == "package-lock.json";
+        path = ./.;
+        name = "src";
+      };
+
       nodeModules = buildNpmPackage {
         name = "node_modules";
-        src = builtins.path {
-          filter = path: type: baseNameOf path == "package-lock.json";
-          path = ./.;
-          name = "src";
-        };
+        src = packageLock;
         dontNpmBuild = true;
         npmDepsHash = builtins.readFile ./npmDepsHash.txt;
         installPhase = ''
@@ -27,8 +29,16 @@
 
       npm = writeShellScriptBin "npm" ''
         unlink ./node_modules
+
+        oldPackageLockHash="$(sha512sum package-lock.json)"
+
         ${nodejs}/bin/npm "$@" --package-lock-only
-        ${prefetch-npm-deps}/bin/prefetch-npm-deps package-lock.json > ./npmDepsHash.txt
+
+        newPackageLockHash="$(sha512sum package-lock.json)"
+        if [ "$oldPackageLockHash" != "$newPackageLockHash" ]; then
+          ${prefetch-npm-deps}/bin/prefetch-npm-deps package-lock.json > ./npmDepsHash.txt
+        fi
+
         direnv reload
       '';
 
