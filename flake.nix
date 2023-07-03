@@ -10,7 +10,7 @@
         name = "node_modules";
         src = ./.;
         dontNpmBuild = true;
-        npmDepsHash = import ./npmDepsHash.nix;
+        npmDepsHash = builtins.readFile ./npmDepsHash.txt;
         installPhase = ''
           mkdir $out
           cp -r node_modules $out
@@ -21,9 +21,7 @@
 
       updateNpmHash = writeShellScriptBin "updateNpmHash" ''
         npm install --package-lock-only
-        hash=$(${prefetch-npm-deps}/bin/prefetch-npm-deps package-lock.json)
-        echo "$hash"
-        echo "\"$hash\"" > ./npmDepsHash.nix
+        ${prefetch-npm-deps}/bin/prefetch-npm-deps package-lock.json
         direnv reload
       '';
 
