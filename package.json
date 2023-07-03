@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "fp-ts": "^2.16.0",
-    "spectacles-ts": "^1.0.7",
     "ts-pattern": "^5.0.1"
   }
 }
