@@ -8,7 +8,7 @@ const minus = (b: number) => (a: number) => a - b
 const result = pipe(
   2,
   plus(2),
-  minus(1),
+  minus(2),
 )
 
 const matched = match(result)

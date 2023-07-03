@@ -6,17 +6,17 @@
   outputs = { self, nixpkgs }: with nixpkgs.legacyPackages.x86_64-linux;
     let
 
-      packageLock = builtins.path {
-        filter = path: _: baseNameOf path == "package-lock.json";
-        path = ./.;
-        name = "src";
-      };
-
       nodeModules = buildNpmPackage {
         name = "node_modules";
-        src = packageLock;
         dontNpmBuild = true;
         npmDepsHash = builtins.readFile ./npmDepsHash.txt;
+        src =
+          builtins.path
+            {
+              filter = path: _: baseNameOf path == "package-lock.json";
+              path = ./.;
+              name = "src";
+            };
         installPhase = ''
           mkdir $out
           cp -r node_modules $out
