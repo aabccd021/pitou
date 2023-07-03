@@ -28,8 +28,21 @@
       '';
 
       npm = writeShellScriptBin "npm" ''
-        unlink ./node_modules
+        array_includes() {
+            local word=$1
+            shift
+            for el in "$@"; do [[ "$el" == "$word" ]] && return 0; done
+        }
 
+        if ! array_includes install "$@" \
+           && ! array_includes uninstall "$@" \
+           && ! array_includes dedupe "$@" \
+           && ! array_includes ci "$@" \
+        ; then
+          ${nodejs}/bin/npm "$@" && exit 0
+        fi
+          
+        unlink ./node_modules
         oldPackageLockHash="$(sha512sum package-lock.json)"
 
         ${nodejs}/bin/npm "$@" --package-lock-only
@@ -39,7 +52,7 @@
           ${prefetch-npm-deps}/bin/prefetch-npm-deps package-lock.json > ./npmDepsHash.txt
         fi
 
-        direnv reload
+        ${setupNodeModules}
       '';
 
     in
