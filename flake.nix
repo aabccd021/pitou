@@ -35,7 +35,6 @@
             cachePath=$PWD/.npm
 
             npm config set cache "$cachePath"
-            npm config set offline true
             npm config set progress false
 
             while read package
