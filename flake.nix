@@ -36,16 +36,16 @@
           buildInputs = [ pkgs.nodejs ];
           dontUnpack = true;
           buildPhase = ''
-            export HOME=$PWD/.home
-            npm config set cache "$PWD/.npm"
+            export HOME="$TMP/.home"
+            npm config set cache "$TMP/.npm-cache"
             npm config set progress false
 
             while read package
             do npm cache add "$package"
             done < ${tarballsFile}
 
-            mkdir $out
-            cd $out
+            mkdir "$out"
+            cd "$out"
             cp ${./package-lock.json} ./package-lock.json
             npm ci --ignore-scripts --offline
             rm package-lock.json
