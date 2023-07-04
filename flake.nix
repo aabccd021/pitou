@@ -14,11 +14,15 @@
           name = "src";
         };
 
-      packageLock = builtins.fromJSON (builtins.readFile "${packageLockSrc}/package-lock.json");
+      packageLock = lib.trivial.pipe "${packageLockSrc}/package-lock.json" [
+        builtins.readFile
+        builtins.fromJSON
+      ];
 
-      deps = builtins.attrValues (removeAttrs packageLock.packages [ "" ]);
-
-      tarballs = map (p: pkgs.fetchurl { url = p.resolved; hash = p.integrity; }) deps;
+      tarballs = lib.trivial.pipe (removeAttrs packageLock.packages [ "" ]) [
+        builtins.attrValues
+        (map (p: pkgs.fetchurl { url = p.resolved; hash = p.integrity; }))
+      ];
 
       tarballsFile = pkgs.writeTextFile {
         name = "tarballs";
