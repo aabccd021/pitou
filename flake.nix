@@ -6,21 +6,7 @@
   outputs = { self, nixpkgs }: with nixpkgs.legacyPackages.x86_64-linux;
     let
 
-
-      packageLockSrc = pkgs.stdenv.mkDerivation {
-        name = "package-lock-src";
-        src = builtins.path
-          {
-            filter = path: _: baseNameOf path == "package-lock.json";
-            path = ./.;
-          };
-        installPhase = ''
-          mkdir $out
-          cp $src/package-lock.json $out/package-lock.json
-        '';
-      };
-
-      packageLock = lib.trivial.pipe "${packageLockSrc}/package-lock.json" [
+      packageLock = lib.trivial.pipe ./package-lock.json [
         builtins.readFile
         builtins.fromJSON
       ];
@@ -39,13 +25,13 @@
 
         (tarballs: pkgs.writeTextFile {
           text = tarballs + "\n";
-          name = "tarballs";
+          name = "${packageLock.name}-${packageLock.version}-tarballs";
         })
       ];
 
       nodeModules = pkgs.stdenv.mkDerivation
         {
-          pname = packageLock.name;
+          pname = "${packageLock.name}-node-modules";
           version = packageLock.version;
           buildInputs = [ pkgs.nodejs ];
           dontUnpack = true;
@@ -54,12 +40,13 @@
             npm config set cache "$PWD/.npm"
             npm config set progress false
 
-
-            while read package; do npm cache add "$package"; done < ${tarballsFile}
+            while read package
+            do npm cache add "$package"
+            done < ${tarballsFile}
 
             mkdir $out
             cd $out
-            cp ${packageLockSrc}/package-lock.json .
+            cp ${./package-lock.json} ./package-lock.json
             npm ci --ignore-scripts --offline
             rm package-lock.json
           '';
