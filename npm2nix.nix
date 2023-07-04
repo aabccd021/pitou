@@ -51,7 +51,7 @@ let
 in
 {
   setupNodeModules = ''
-    ln -sfn ${nodeModules}/node_modules ./node_modules
+    ln -sfn ${nodeModules}/node_modules "$("${nodejs}/bin/npm" root)"
   '';
 
   command = writeShellScriptBin "npm" ''
@@ -66,11 +66,12 @@ in
        && ! array_includes dedupe "$@" \
        && ! array_includes ci "$@" \
     ; then
-      ${nodejs}/bin/npm "$@"
+      "${nodejs}/bin/npm" "$@"
       exit 0
     fi
           
-    unlink ./node_modules
+    projectRoot="$("${nodejs}/bin/npm" root)"
+    rm -rf "$projectRoot"
     ${nodejs}/bin/npm "$@" --package-lock-only
     ${reload}
   '';
