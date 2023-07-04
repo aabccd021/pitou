@@ -11,7 +11,6 @@
         {
           filter = path: _: baseNameOf path == "package-lock.json";
           path = ./.;
-          name = "src";
         };
 
       packageLock = lib.trivial.pipe "${packageLockSrc}/package-lock.json" [
@@ -19,15 +18,22 @@
         builtins.fromJSON
       ];
 
-      tarballs = lib.trivial.pipe (removeAttrs packageLock.packages [ "" ]) [
-        builtins.attrValues
-        (map (p: pkgs.fetchurl { url = p.resolved; hash = p.integrity; }))
-      ];
+      tarballsFile = lib.trivial.pipe (removeAttrs packageLock.packages [ "" ]) [
 
-      tarballsFile = pkgs.writeTextFile {
-        name = "tarballs";
-        text = builtins.concatStringsSep "\n" tarballs + "\n";
-      };
+        builtins.attrValues
+
+        (map (p: pkgs.fetchurl {
+          url = p.resolved;
+          hash = p.integrity;
+        }))
+
+        (builtins.concatStringsSep "\n")
+
+        (tarballs: pkgs.writeTextFile {
+          text = tarballs + "\n";
+          name = "tarballs";
+        })
+      ];
 
       nodeModules = pkgs.stdenv.mkDerivation
         {
