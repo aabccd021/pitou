@@ -9,15 +9,14 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         packageLockPath = ./package-lock.json;
       };
-
-      npmCommand = npm.mkCommand {
-        postNodeModulesModified = "direnv reload";
-      };
     in
     {
 
       devShell.x86_64-linux = mkShellNoCC {
-        buildInputs = [ bun npmCommand ];
+        buildInputs = [
+          bun
+          (npm.mkCommand { postNodeModulesModified = "direnv reload"; })
+        ];
         shellHook = npm.setupNodeModules;
       };
 
