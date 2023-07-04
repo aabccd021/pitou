@@ -32,15 +32,11 @@
           src = packageLockSrc;
           buildPhase = ''
             export HOME=$PWD/.home
-            cachePath=$PWD/.npm
-
-            npm config set cache "$cachePath"
+            npm config set cache "$PWD/.npm"
             npm config set progress false
 
-            while read package
-            do
-              npm cache add "$package"
-            done <${tarballsFile}
+
+            while read package; do npm cache add "$package"; done < ${tarballsFile}
 
             mkdir $out
             cd $out
