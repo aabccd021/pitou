@@ -1,8 +1,8 @@
-{ nixpkgs
+{ pkgs
 , packageLockPath
 , reload
 }:
-with nixpkgs.legacyPackages.x86_64-linux;
+with pkgs;
 let
   packageLock = lib.trivial.pipe
     packageLockPath [

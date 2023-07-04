@@ -6,7 +6,7 @@
   outputs = { self, nixpkgs }: with nixpkgs.legacyPackages.x86_64-linux;
     let
       npm = import ./npm2nix.nix {
-        inherit nixpkgs;
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
         packageLockPath = ./package-lock.json;
         reload = "direnv reload";
       };
