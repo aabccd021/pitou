@@ -8,26 +8,38 @@
       npm = import ./npm2nix.nix {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         packageLockPath = ./package-lock.json;
-        reload = "direnv reload";
+      };
+
+      npmCommand = npm.mkCommand {
+        postNodeModulesModified = "direnv reload";
       };
     in
     {
 
       devShell.x86_64-linux = mkShellNoCC {
-        buildInputs = [ bun npm.command ];
+        buildInputs = [ bun npmCommand ];
         shellHook = npm.setupNodeModules;
       };
 
       packages.x86_64-linux.default = stdenv.mkDerivation {
         name = "my-package";
-        src = ./.;
+        src = ./src;
+
+        unpackPhase = ''
+          cp -r "$src" ./src
+        '';
+
         configurePhase = npm.setupNodeModules;
-        buildPhase = "${bun}/bin/bun build src/index.ts --outfile ./dist/index.js";
+
+        buildPhase = ''
+          ${bun}/bin/bun build ./src/index.ts --outfile ./dist/index.js
+        '';
+
         installPhase = ''
           mkdir $out
           cp dist/index.js $out
         '';
-      };
 
+      };
     };
 }

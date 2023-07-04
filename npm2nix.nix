@@ -1,6 +1,5 @@
 { pkgs
 , packageLockPath
-, reload
 }:
 with pkgs;
 let
@@ -54,7 +53,7 @@ in
     ln -sfn ${nodeModules}/node_modules "$("${nodejs}/bin/npm" root)"
   '';
 
-  command = writeShellScriptBin "npm" ''
+  mkCommand = { postNodeModulesModified }: writeShellScriptBin "npm" ''
     array_includes() {
         local word=$1
         shift
@@ -70,9 +69,8 @@ in
       exit 0
     fi
           
-    projectRoot="$("${nodejs}/bin/npm" root)"
-    rm -rf "$projectRoot"
+    rm -rf "$("${nodejs}/bin/npm" root)"
     ${nodejs}/bin/npm "$@" --package-lock-only
-    ${reload}
+    ${postNodeModulesModified}
   '';
 }
