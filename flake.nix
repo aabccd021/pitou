@@ -6,22 +6,50 @@
   outputs = { self, nixpkgs }: with nixpkgs.legacyPackages.x86_64-linux;
     let
 
-      nodeModules = buildNpmPackage {
-        name = "node_modules";
-        dontNpmBuild = true;
-        npmDepsHash = builtins.readFile ./npmDepsHash.txt;
-        src =
-          builtins.path
-            {
-              filter = path: _: baseNameOf path == "package-lock.json";
-              path = ./.;
-              name = "src";
-            };
-        installPhase = ''
-          mkdir $out
-          cp -r node_modules $out
-        '';
+
+      packageLockSrc = builtins.path
+        {
+          filter = path: _: baseNameOf path == "package-lock.json";
+          path = ./.;
+          name = "src";
+        };
+
+      packageLock = builtins.fromJSON (builtins.readFile "${packageLockSrc}/package-lock.json");
+
+      deps = builtins.attrValues (removeAttrs packageLock.packages [ "" ]);
+
+      tarballs = map (p: pkgs.fetchurl { url = p.resolved; hash = p.integrity; }) deps;
+
+      tarballsFile = pkgs.writeTextFile {
+        name = "tarballs";
+        text = builtins.concatStringsSep "\n" tarballs + "\n";
       };
+
+      nodeModules = pkgs.stdenv.mkDerivation
+        {
+          inherit (packageLock) name version;
+          buildInputs = [ pkgs.nodejs ];
+          src = packageLockSrc;
+          buildPhase = ''
+            export HOME=$PWD/.home
+            cachePath=$PWD/.npm
+
+            npm config set cache "$cachePath"
+            npm config set offline true
+            npm config set progress false
+
+            while read package
+            do
+              npm cache add "$package"
+            done <${tarballsFile}
+
+            mkdir $out
+            cd $out
+            cp $src/package-lock.json .
+            npm ci --ignore-scripts --offline
+            rm package-lock.json
+          '';
+        };
 
       setupNodeModules = ''
         ln -sfn ${nodeModules}/node_modules ./node_modules
