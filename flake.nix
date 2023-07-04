@@ -5,7 +5,7 @@
 
   outputs = { self, nixpkgs }: with nixpkgs.legacyPackages.x86_64-linux;
     let
-      npmPackages = import ./npm2nix.nix {
+      npm = import ./npm2nix.nix {
         inherit nixpkgs;
         packageLockPath = ./package-lock.json;
         reload = "direnv reload";
@@ -14,14 +14,14 @@
     {
 
       devShell.x86_64-linux = mkShellNoCC {
-        buildInputs = [ bun npmPackages.npm ];
-        shellHook = npmPackages.setupNodeModules;
+        buildInputs = [ bun npm.command ];
+        shellHook = npm.setupNodeModules;
       };
 
       packages.x86_64-linux.default = stdenv.mkDerivation {
         name = "my-package";
         src = ./.;
-        configurePhase = npmPackages.setupNodeModules;
+        configurePhase = npm.setupNodeModules;
         buildPhase = "${bun}/bin/bun build src/index.ts --outfile ./dist/index.js";
         installPhase = ''
           mkdir $out

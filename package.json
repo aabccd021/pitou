@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "fp-ts": "^2.16.0",
-    "io-ts": "^2.2.20",
     "ts-pattern": "^5.0.1"
   }
 }
