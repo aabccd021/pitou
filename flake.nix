@@ -7,11 +7,18 @@
     let
 
 
-      packageLockSrc = builtins.path
-        {
-          filter = path: _: baseNameOf path == "package-lock.json";
-          path = ./.;
-        };
+      packageLockSrc = pkgs.stdenv.mkDerivation {
+        name = "package-lock-src";
+        src = builtins.path
+          {
+            filter = path: _: baseNameOf path == "package-lock.json";
+            path = ./.;
+          };
+        installPhase = ''
+          mkdir $out
+          cp $src/package-lock.json $out/package-lock.json
+        '';
+      };
 
       packageLock = lib.trivial.pipe "${packageLockSrc}/package-lock.json" [
         builtins.readFile
