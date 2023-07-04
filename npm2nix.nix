@@ -66,7 +66,8 @@ in
        && ! array_includes dedupe "$@" \
        && ! array_includes ci "$@" \
     ; then
-      ${nodejs}/bin/npm "$@" && exit 0
+      ${nodejs}/bin/npm "$@"
+      exit 0
     fi
           
     unlink ./node_modules
