@@ -37,7 +37,6 @@
           dontUnpack = true;
           buildPhase = ''
             export HOME="$TMP/.home"
-            npm config set cache "$TMP/.npm-cache"
             npm config set progress false
 
             while read package
