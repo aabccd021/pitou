@@ -12,7 +12,6 @@ let
 
   tarballsFile = lib.trivial.pipe (packageLock.packages) [
     (lib.trivial.flip removeAttrs [ "" ])
-
     builtins.attrValues
 
     (map (package: fetchurl {
@@ -23,8 +22,8 @@ let
     (builtins.concatStringsSep "\n")
 
     (tarballs: writeTextFile {
-      text = tarballs + "\n";
       name = "${packageLock.name}-${packageLock.version}-tarballs";
+      text = tarballs + "\n";
     })
   ];
 
