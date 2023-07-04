@@ -11,13 +11,13 @@ let
   ];
 
   tarballsFile = lib.trivial.pipe (packageLock.packages) [
-    ((lib.trivial.flip removeAttrs) [ "" ])
+    (lib.trivial.flip removeAttrs [ "" ])
 
     builtins.attrValues
 
-    (map (p: fetchurl {
-      url = p.resolved;
-      hash = p.integrity;
+    (map (package: fetchurl {
+      url = package.resolved;
+      hash = package.integrity;
     }))
 
     (builtins.concatStringsSep "\n")
