@@ -16,24 +16,24 @@
 
         builtins.attrValues
 
-        (map (p: pkgs.fetchurl {
+        (map (p: fetchurl {
           url = p.resolved;
           hash = p.integrity;
         }))
 
         (builtins.concatStringsSep "\n")
 
-        (tarballs: pkgs.writeTextFile {
+        (tarballs: writeTextFile {
           text = tarballs + "\n";
           name = "${packageLock.name}-${packageLock.version}-tarballs";
         })
       ];
 
-      nodeModules = pkgs.stdenv.mkDerivation
+      nodeModules = stdenv.mkDerivation
         {
           pname = "${packageLock.name}-node-modules";
           version = packageLock.version;
-          buildInputs = [ pkgs.nodejs ];
+          buildInputs = [ nodejs ];
           dontUnpack = true;
           buildPhase = ''
             export HOME="$TMP/.home"
