@@ -72,16 +72,8 @@
         fi
           
         unlink ./node_modules
-        oldPackageLockHash="$(sha512sum package-lock.json)"
-
         ${nodejs}/bin/npm "$@" --package-lock-only
-
-        newPackageLockHash="$(sha512sum package-lock.json)"
-        if [ "$oldPackageLockHash" != "$newPackageLockHash" ]; then
-          ${prefetch-npm-deps}/bin/prefetch-npm-deps package-lock.json > ./npmDepsHash.txt
-        fi
-
-        ${setupNodeModules}
+        direnv reload
       '';
 
     in
