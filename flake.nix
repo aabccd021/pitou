@@ -25,7 +25,8 @@
         builtins.fromJSON
       ];
 
-      tarballsFile = lib.trivial.pipe (removeAttrs packageLock.packages [ "" ]) [
+      tarballsFile = lib.trivial.pipe (packageLock.packages) [
+        ((lib.trivial.flip removeAttrs) [ "" ])
 
         builtins.attrValues
 
@@ -44,9 +45,10 @@
 
       nodeModules = pkgs.stdenv.mkDerivation
         {
-          inherit (packageLock) name version;
+          pname = packageLock.name;
+          version = packageLock.version;
           buildInputs = [ pkgs.nodejs ];
-          src = packageLockSrc;
+          dontUnpack = true;
           buildPhase = ''
             export HOME=$PWD/.home
             npm config set cache "$PWD/.npm"
@@ -57,7 +59,7 @@
 
             mkdir $out
             cd $out
-            cp $src/package-lock.json .
+            cp ${packageLockSrc}/package-lock.json .
             npm ci --ignore-scripts --offline
             rm package-lock.json
           '';
