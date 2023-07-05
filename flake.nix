@@ -8,16 +8,20 @@
     };
   };
 
-  outputs = { self, nixpkgs, tree-sitter-javascript }: with nixpkgs.legacyPackages.x86_64-linux;
+  outputs = inputs: with inputs.nixpkgs.legacyPackages.x86_64-linux;
     let
       npm = import ./npm2nix.nix {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
         packageLockPath = ./package-lock.json;
+      };
+
+      treeSitter = {
+        javascript = inputs.tree-sitter-javascript;
       };
 
       treeSitterWasm.javascript = stdenv.mkDerivation {
         name = "tree-sitter-javascript-wasm";
-        src = tree-sitter-javascript;
+        src = inputs.tree-sitter-javascript;
         buildInputs = [ emscripten ];
         buildPhase = ''
           cp -r $src grammar
