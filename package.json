@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "fp-ts": "^2.16.0",
+    "shiki": "^0.14.3",
     "ts-pattern": "^5.0.1"
   }
 }
