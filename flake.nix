@@ -60,5 +60,13 @@
       };
 
       packages.x86_64-linux.treesitter = treeSitterJavascriptWasm;
+
+
+      apps.x86_64-linux.default = {
+        type = "app";
+        program = toString (writeShellScript "aabccd" ''
+          echo aabccd022
+        '');
+      };
     };
 }
