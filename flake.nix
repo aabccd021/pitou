@@ -15,14 +15,14 @@
         packageLockPath = ./package-lock.json;
       };
 
-      treeSitterJavascriptWasm = stdenv.mkDerivation {
+      treeSitterWasm.javascript = stdenv.mkDerivation {
         name = "tree-sitter-javascript-wasm";
         src = tree-sitter-javascript;
         buildInputs = [ emscripten ];
         buildPhase = ''
-          cp -r $src tree-sitter-javascript
-          chmod -R +w tree-sitter-javascript
-          ${tree-sitter}/bin/tree-sitter build-wasm tree-sitter-javascript
+          cp -r $src grammar
+          chmod +w grammar
+          ${tree-sitter}/bin/tree-sitter build-wasm grammar
         '';
         installPhase = ''
           mkdir $out
@@ -58,7 +58,7 @@
         installPhase = ''
           mkdir $out
           cp dist/index.js $out
-          cp ${treeSitterJavascriptWasm}/tree-sitter-javascript.wasm $out
+          cp ${treeSitterWasm.javascript}/tree-sitter-javascript.wasm $out
         '';
 
       };
