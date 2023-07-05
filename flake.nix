@@ -6,6 +6,13 @@
       url = "github:tree-sitter/tree-sitter-javascript";
       flake = false;
     };
+
+
+    tree-sitter-nix = {
+      url = "github:nix-community/tree-sitter-nix";
+      flake = false;
+    };
+
   };
 
   outputs = inputs: with inputs.nixpkgs.legacyPackages.x86_64-linux;
@@ -17,6 +24,7 @@
 
       treeSitters = {
         javascript = inputs.tree-sitter-javascript;
+        nix = inputs.tree-sitter-nix;
       };
 
       mkTreeSitterWasm = (lang: repo:
