@@ -1,6 +1,5 @@
-{ pkgs
-, packageLockPath
-}:
+pkgs:
+packageLockPath:
 with pkgs;
 let
   packageLock = lib.trivial.pipe
@@ -53,7 +52,7 @@ in
     ln -sfn ${nodeModules}/node_modules "$("${nodejs}/bin/npm" root)"
   '';
 
-  mkCommand = { postNodeModulesModified }: writeShellScriptBin "npm" ''
+  command = writeShellScriptBin "npm" ''
     array_includes() {
         local word=$1
         shift
@@ -71,6 +70,5 @@ in
           
     rm -rf "$("${nodejs}/bin/npm" root)"
     ${nodejs}/bin/npm "$@" --package-lock-only
-    ${postNodeModulesModified}
   '';
 }

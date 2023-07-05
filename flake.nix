@@ -1,94 +1,46 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-
-    tree-sitter-javascript = {
-      url = "github:tree-sitter/tree-sitter-javascript";
-      flake = false;
-    };
-
-
-    tree-sitter-nix = {
-      url = "github:nix-community/tree-sitter-nix";
-      flake = false;
-    };
-
+    tree-sitter-javascript = { url = "github:tree-sitter/tree-sitter-javascript"; flake = false; };
+    tree-sitter-nix = { url = "github:nix-community/tree-sitter-nix"; flake = false; };
   };
 
   outputs = inputs: with inputs.nixpkgs.legacyPackages.x86_64-linux;
     let
-      npm = import ./npm2nix.nix {
-        pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-        packageLockPath = ./package-lock.json;
-      };
+      pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
 
-      treeSitters = {
+      npm = import ./npm2nix.nix pkgs ./package-lock.json;
+
+      treeSitterWasms = import ./tree-sitter-wasm.nix pkgs {
         javascript = inputs.tree-sitter-javascript;
         nix = inputs.tree-sitter-nix;
       };
-
-      mkTreeSitterWasm = (lang: repo:
-        stdenv.mkDerivation {
-          name = "tree-sitter-wasm-${lang}";
-          src = repo;
-          buildInputs = [ emscripten ];
-          buildPhase = ''
-            cp -r $src grammar
-            chmod +w grammar
-            ${tree-sitter}/bin/tree-sitter build-wasm grammar
-          '';
-          installPhase = ''
-            mkdir $out
-            cp tree-sitter-${lang}.wasm $out
-          '';
-        });
-
-      treeSitterWasms = lib.trivial.pipe treeSitters [
-        (builtins.mapAttrs mkTreeSitterWasm)
-        builtins.attrValues
-        (builtins.concatStringsSep "\n")
-        (treeSitterWasms: writeTextFile {
-          name = "tree-sitters-wasms";
-          text = treeSitterWasms + "\n";
-        })
-      ];
     in
     {
 
       devShell.x86_64-linux = mkShellNoCC {
-        buildInputs = [
-          bun
-          (npm.mkCommand { postNodeModulesModified = "direnv reload"; })
-        ];
+        buildInputs = [ bun npm.command ];
         shellHook = npm.setupNodeModules;
       };
 
       packages.x86_64-linux.default = stdenv.mkDerivation {
         name = "pitou";
         src = ./src;
-
         unpackPhase = ''
           cp -r "$src" ./src
         '';
-
         configurePhase = npm.setupNodeModules;
-
         buildPhase = ''
           ${bun}/bin/bun build ./src/index.ts --target bun --outfile ./dist/index.js
         '';
-
         installPhase = ''
           mkdir $out
           cp dist/index.js $out
-          while read treeSitterWasm
-          do cp -r "$treeSitterWasm/." $out
+          while read wasm 
+          do cp -r "$wasm/." $out
           done < ${treeSitterWasms}
         '';
-
       };
-
-      packages.x86_64-linux.treesitter = treeSitterJavascriptWasm;
-
 
       apps.x86_64-linux.default = {
         type = "app";
