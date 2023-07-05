@@ -9,6 +9,23 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         packageLockPath = ./package-lock.json;
       };
+
+      treeSitterJavascriptWasm = stdenv.mkDerivation {
+        name = "tree-sitter-javascript-wasm";
+        dontUnpack = true;
+        configurePhase = npm.setupNodeModules;
+        buildInputs = [ emscripten ];
+        buildPhase = ''
+          cp -r node_modules/tree-sitter-javascript .
+          chmod -R +w tree-sitter-javascript
+          ${tree-sitter}/bin/tree-sitter build-wasm tree-sitter-javascript
+        '';
+        installPhase = ''
+          mkdir $out
+          cp tree-sitter-javascript.wasm $out
+        '';
+      };
+
     in
     {
 
@@ -21,7 +38,7 @@
       };
 
       packages.x86_64-linux.default = stdenv.mkDerivation {
-        name = "my-package";
+        name = "pitou";
         src = ./src;
 
         unpackPhase = ''
@@ -37,8 +54,11 @@
         installPhase = ''
           mkdir $out
           cp dist/index.js $out
+          cp ${treeSitterJavascriptWasm}/tree-sitter-javascript.wasm $out
         '';
 
       };
+
+      packages.x86_64-linux.treesitter = treeSitterJavascriptWasm;
     };
 }

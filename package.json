@@ -4,10 +4,10 @@
   "module": "src/index.ts",
   "type": "module",
   "devDependencies": {
-    "bun-types": "^0.5.0"
+    "bun-types": "^0.5.0",
+    "tree-sitter-javascript": "^0.19.0"
   },
   "dependencies": {
-    "fp-ts": "^2.16.0",
-    "ts-pattern": "^5.0.1"
+    "web-tree-sitter": "^0.20.8"
   }
 }
