@@ -1,6 +1,4 @@
-pkgs:
-packageLockPath:
-with pkgs;
+pkgs: packageLockPath: with pkgs;
 let
   packageLock = lib.trivial.pipe
     packageLockPath [
@@ -24,7 +22,8 @@ let
       text = tarballs + "\n";
     })
   ];
-
+in
+{
   nodeModules = stdenv.mkDerivation {
     pname = "${packageLock.name}-node-modules";
     version = packageLock.version;
@@ -45,12 +44,6 @@ let
       rm package-lock.json
     '';
   };
-
-in
-{
-  setupNodeModules = ''
-    ln -sfn ${nodeModules}/node_modules "$("${nodejs}/bin/npm" root)"
-  '';
 
   command = writeShellScriptBin "npm" ''
     array_includes() {

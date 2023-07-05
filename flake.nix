@@ -15,12 +15,16 @@
         javascript = inputs.tree-sitter-javascript;
         nix = inputs.tree-sitter-nix;
       };
+
+      setupNodeModules = ''
+        ln -sfn ${npm.nodeModules}/node_modules "$(${npm.command}/bin/npm root)"
+      '';
     in
     {
 
       devShell.x86_64-linux = mkShellNoCC {
         buildInputs = [ bun npm.command ];
-        shellHook = npm.setupNodeModules;
+        shellHook = setupNodeModules;
       };
 
       packages.x86_64-linux.default = stdenv.mkDerivation {
@@ -29,7 +33,7 @@
         unpackPhase = ''
           cp -r "$src" ./src
         '';
-        configurePhase = npm.setupNodeModules;
+        configurePhase = setupNodeModules;
         buildPhase = ''
           ${bun}/bin/bun build ./src/index.ts --target bun --outfile ./dist/index.js
         '';
