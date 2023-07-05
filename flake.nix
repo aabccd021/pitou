@@ -31,14 +31,12 @@
         configurePhase = npm.setupNodeModules;
 
         buildPhase = ''
-          ${bun}/bin/bun build ./src/index.ts \
-          --outdir dist \
-          --target bun
+          ${bun}/bin/bun build ./src/index.ts --outfile ./dist/index.js
         '';
 
         installPhase = ''
           mkdir $out
-          cp -r dist/. $out
+          cp dist/index.js $out
         '';
 
       };
