@@ -19,7 +19,7 @@
         javascript = inputs.tree-sitter-javascript;
       };
 
-      makeTreeSitterWasm = ((lang: repo:
+      mkTreeSitterWasm = (lang: repo:
         stdenv.mkDerivation {
           name = "tree-sitter-wasm-${lang}";
           src = repo;
@@ -33,24 +33,17 @@
             mkdir $out
             cp tree-sitter-${lang}.wasm $out
           '';
-        }
-      ) treeSitters);
+        });
 
-      treeSitterWasm.javascript = stdenv.mkDerivation {
-        name = "tree-sitter-wasm-javascript";
-        src = inputs.tree-sitter-javascript;
-        buildInputs = [ emscripten ];
-        buildPhase = ''
-          cp -r $src grammar
-          chmod +w grammar
-          ${tree-sitter}/bin/tree-sitter build-wasm grammar
-        '';
-        installPhase = ''
-          mkdir $out
-          cp tree-sitter-javascript.wasm $out
-        '';
-      };
-
+      treeSitterWasms = lib.trivial.pipe treeSitters [
+        (builtins.mapAttrs mkTreeSitterWasm)
+        builtins.attrValues
+        (builtins.concatStringsSep "\n")
+        (treeSitterWasms: writeTextFile {
+          name = "tree-sitters-wasms";
+          text = treeSitterWasms + "\n";
+        })
+      ];
     in
     {
 
@@ -79,7 +72,9 @@
         installPhase = ''
           mkdir $out
           cp dist/index.js $out
-          cp ${treeSitterWasm.javascript}/tree-sitter-javascript.wasm $out
+          while read treeSitterWasm
+          do cp -r "$treeSitterWasm/." $out
+          done < ${treeSitterWasms}
         '';
 
       };
