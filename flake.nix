@@ -11,7 +11,7 @@
 
       npm = import ./npm2nix.nix pkgs ./package-lock.json;
 
-      setupNodeModules = writeShellScript "setupNodeModules"''
+      setupNodeModules = writeShellScript "setupNodeModules" ''
         ln -sfn ${npm.nodeModules}/node_modules "$(${npm.command}/bin/npm root)"
       '';
 
@@ -31,7 +31,10 @@
 
       devShell.x86_64-linux = mkShellNoCC {
         buildInputs = [ bun npm.command ];
-        shellHook = setupNodeModules;
+        shellHook = ''
+          ${setupNodeModules}
+          ${setupTreeSitterWasms} ./src
+        '';
       };
 
       packages.x86_64-linux.default = stdenv.mkDerivation {
