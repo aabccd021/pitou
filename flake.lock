@@ -18,7 +18,24 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "tree-sitter-javascript": "tree-sitter-javascript"
+      }
+    },
+    "tree-sitter-javascript": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1677243001,
+        "narHash": "sha256-rSkLSXdthOS9wzXsC8D1Z1P0vmOT+APzeesvlN7ta6U=",
+        "owner": "tree-sitter",
+        "repo": "tree-sitter-javascript",
+        "rev": "5720b249490b3c17245ba772f6be4a43edb4e3b7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tree-sitter",
+        "repo": "tree-sitter-javascript",
+        "type": "github"
       }
     }
   },

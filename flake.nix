@@ -1,9 +1,14 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+
+    tree-sitter-javascript = {
+      url = "github:tree-sitter/tree-sitter-javascript";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs }: with nixpkgs.legacyPackages.x86_64-linux;
+  outputs = { self, nixpkgs, tree-sitter-javascript }: with nixpkgs.legacyPackages.x86_64-linux;
     let
       npm = import ./npm2nix.nix {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
@@ -12,11 +17,10 @@
 
       treeSitterJavascriptWasm = stdenv.mkDerivation {
         name = "tree-sitter-javascript-wasm";
-        dontUnpack = true;
-        configurePhase = npm.setupNodeModules;
+        src = tree-sitter-javascript;
         buildInputs = [ emscripten ];
         buildPhase = ''
-          cp -r node_modules/tree-sitter-javascript .
+          cp -r $src tree-sitter-javascript
           chmod -R +w tree-sitter-javascript
           ${tree-sitter}/bin/tree-sitter build-wasm tree-sitter-javascript
         '';
