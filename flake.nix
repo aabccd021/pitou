@@ -15,12 +15,29 @@
         packageLockPath = ./package-lock.json;
       };
 
-      treeSitter = {
+      treeSitters = {
         javascript = inputs.tree-sitter-javascript;
       };
 
+      makeTreeSitterWasm = ((lang: repo:
+        stdenv.mkDerivation {
+          name = "tree-sitter-wasm-${lang}";
+          src = repo;
+          buildInputs = [ emscripten ];
+          buildPhase = ''
+            cp -r $src grammar
+            chmod +w grammar
+            ${tree-sitter}/bin/tree-sitter build-wasm grammar
+          '';
+          installPhase = ''
+            mkdir $out
+            cp tree-sitter-${lang}.wasm $out
+          '';
+        }
+      ) treeSitters);
+
       treeSitterWasm.javascript = stdenv.mkDerivation {
-        name = "tree-sitter-javascript-wasm";
+        name = "tree-sitter-wasm-javascript";
         src = inputs.tree-sitter-javascript;
         buildInputs = [ emscripten ];
         buildPhase = ''
