@@ -11,7 +11,7 @@
 
       npm = import ./npm2nix.nix pkgs ./package-lock.json;
 
-      setupNodeModules = ''
+      setupNodeModules = writeShellScript "setupNodeModules"''
         ln -sfn ${npm.nodeModules}/node_modules "$(${npm.command}/bin/npm root)"
       '';
 
@@ -19,6 +19,13 @@
         javascript = inputs.tree-sitter-javascript;
         nix = inputs.tree-sitter-nix;
       };
+
+      setupTreeSitterWasms = writeShellScript "setupTreeSitterWasms" ''
+        mkdir -p ${treeSitterWasms}
+        while read wasm 
+        do cp -r "$wasm/." $1
+        done < ${treeSitterWasms}
+      '';
     in
     {
 
@@ -40,9 +47,7 @@
         installPhase = ''
           mkdir $out
           cp dist/index.js $out
-          while read wasm 
-          do cp -r "$wasm/." $out
-          done < ${treeSitterWasms}
+          ${setupTreeSitterWasms} $out
         '';
       };
 

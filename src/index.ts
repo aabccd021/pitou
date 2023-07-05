@@ -10,12 +10,12 @@ const makeParser = async (lang: Language) => {
   return parser;
 }
 
+
 const main = async () => {
   const jsParser = await makeParser('javascript');
-  console.log(jsParser.parse('let x = 1').rootNode.toString())
-
-  const nixParser = await makeParser('nix');
-  console.log(nixParser.parse('key: _: key').rootNode.toString())
+  const parsed = jsParser.parse('let x = 1');
+  console.log(parsed.rootNode.toString());
+  JSON.stringify(parsed.rootNode, null, 2);
 }
 
 await main();
