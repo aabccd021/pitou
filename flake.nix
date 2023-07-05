@@ -11,14 +11,14 @@
 
       npm = import ./npm2nix.nix pkgs ./package-lock.json;
 
+      setupNodeModules = ''
+        ln -sfn ${npm.nodeModules}/node_modules "$(${npm.command}/bin/npm root)"
+      '';
+
       treeSitterWasms = import ./tree-sitter-wasm.nix pkgs {
         javascript = inputs.tree-sitter-javascript;
         nix = inputs.tree-sitter-nix;
       };
-
-      setupNodeModules = ''
-        ln -sfn ${npm.nodeModules}/node_modules "$(${npm.command}/bin/npm root)"
-      '';
     in
     {
 
