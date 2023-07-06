@@ -30,7 +30,7 @@ stdenv.mkDerivation ({
   buildPhase = ''
     runHook preBuild
 
-    ${tree-sitter}/bin/tree-sitter build-wasm .
+    ${tree-sitter}/bin/tree-sitter build-wasm
 
     runHook postBuild
   '';
