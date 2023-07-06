@@ -15,7 +15,8 @@ const main = async () => {
   const jsParser = await makeParser('javascript');
   const parsed = jsParser.parse('let x = 1');
   console.log(parsed.rootNode.toString());
-  JSON.stringify(parsed.rootNode, null, 2);
+  console.log(await Bun.file(import.meta.path).text());
+  Bun.write(`${import.meta.dir}/../.temp/aab.json`, (JSON.stringify(parsed.rootNode.children, null, 2)))
 }
 
 await main();

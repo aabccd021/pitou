@@ -18,41 +18,7 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "tree-sitter-javascript": "tree-sitter-javascript",
-        "tree-sitter-nix": "tree-sitter-nix"
-      }
-    },
-    "tree-sitter-javascript": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1677243001,
-        "narHash": "sha256-rSkLSXdthOS9wzXsC8D1Z1P0vmOT+APzeesvlN7ta6U=",
-        "owner": "tree-sitter",
-        "repo": "tree-sitter-javascript",
-        "rev": "5720b249490b3c17245ba772f6be4a43edb4e3b7",
-        "type": "github"
-      },
-      "original": {
-        "owner": "tree-sitter",
-        "repo": "tree-sitter-javascript",
-        "type": "github"
-      }
-    },
-    "tree-sitter-nix": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1678573917,
-        "narHash": "sha256-9E4iQ7jr52ckmQJBrF9Vdwanrgm2I+Gi1lbC46I+4/g=",
-        "owner": "nix-community",
-        "repo": "tree-sitter-nix",
-        "rev": "02878b40ac77d2889833519c6b6e9e63cfc690e6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-community",
-        "repo": "tree-sitter-nix",
-        "type": "github"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

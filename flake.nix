@@ -1,8 +1,6 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-    tree-sitter-javascript = { url = "github:tree-sitter/tree-sitter-javascript"; flake = false; };
-    tree-sitter-nix = { url = "github:nix-community/tree-sitter-nix"; flake = false; };
   };
 
   outputs = inputs: with inputs.nixpkgs.legacyPackages.x86_64-linux;
@@ -57,7 +55,7 @@
       apps.x86_64-linux.default = {
         type = "app";
         program = toString (writeShellScript "aabccd" ''
-          echo aabccd022
+          ls ${pkgs.tree-sitter.grammars}
         '');
       };
     };
