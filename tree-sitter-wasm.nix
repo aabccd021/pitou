@@ -15,8 +15,7 @@ let
       buildPhase = ''
         cp -rH ${pkgs.tree-sitter.grammars}/${lang}/. grammar
         chmod +w grammar
-        ls -la grammar
-
+        ls grammar
         ${tree-sitter}/bin/tree-sitter build-wasm grammar
       '';
       installPhase = ''
