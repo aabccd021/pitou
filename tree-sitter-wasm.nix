@@ -26,18 +26,18 @@ let
           language = name;
           inherit (grammar) dirname;
           location = grammar.location or null;
-          wasmName = (
-            grammar.wasmName
-              or grammar.language
-              or (lib.trivial.pipe name [
-              (lib.removePrefix "tree-sitter-")
-              (lib.strings.replaceStrings [ "-" ] [ "_" ])
-            ])
-          );
+          wasmName = grammar.wasmName or
+            grammar.language or
+              (lib.strings.replaceStrings [ "-" ] [ "_" ]
+                (lib.strings.removePrefix "tree-sitter-" name));
         };
 
       wasmGrammars = grammars //
-        { tree-sitter-ql-dbscheme = grammars'.tree-sitter-ql-dbscheme // { wasmName = "dbscheme"; }; };
+        ((builtins.removeAttrs) [
+          # Doesn't build
+          "tree-sitter-llvm"
+        ])
+          { tree-sitter-ql-dbscheme = grammars'.tree-sitter-ql-dbscheme // { wasmName = "dbscheme"; }; };
     in
     lib.mapAttrs buildWasm (wasmGrammars);
 in
