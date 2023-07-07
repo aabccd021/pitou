@@ -54,14 +54,6 @@
           cp dist/index.js $out/dist/index.js
 
           mkdir -p $out/tree-sitter-wasm
-          ls $out
-          ls $out/tree-sitter-wasm
-
-          echo aab
-          echo ${treeSitterWasms}
-          cat ${treeSitterWasms}
-          echo ccd
-
           while read wasmDir
           do cp -r $wasmDir/. $out/tree-sitter-wasm/
           done < ${treeSitterWasms}
