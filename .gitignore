@@ -3,3 +3,4 @@ node_modules
 result
 dist
 .temp
+tree-sitter-wasm

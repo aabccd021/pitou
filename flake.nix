@@ -9,12 +9,12 @@
 
       npm = import ./npm2nix.nix pkgs ./package-lock.json;
 
-      projectRoot = ''
-        "$(${npm.command}/bin/npm root)"
-      '';
+      nodeModulesDir = "$(${npm.command}/bin/npm root)";
+
+      projectRoot = "$(${git}/bin/git rev-parse --show-toplevel)";
 
       setupNodeModules = writeShellScript "setupNodeModules" ''
-        ln -sfn ${npm.nodeModules}/node_modules ${projectRoot}
+        ln -sfn ${npm.nodeModules}/node_modules ${nodeModulesDir}
       '';
 
       treeSitterWasms = import ./tree-sitter-wasm.nix pkgs {
@@ -22,7 +22,7 @@
         tree-sitter-nix = true;
         tree-sitter-typescript = true;
       };
- 
+
     in
     {
 
@@ -31,9 +31,10 @@
         shellHook = ''
           ${setupNodeModules}
 
-          mkdir -p ${projectRoot}/tree-sitter-wasm
-          while read wasm 
-          do ln -s "$wasm/." $out/tree-sitter-wasm
+          rm -rf ${projectRoot}/tree-sitter-wasm
+          mkdir ${projectRoot}/tree-sitter-wasm
+          while read wasmDir
+          do cp -rs "$wasmDir/." "${projectRoot}/tree-sitter-wasm/"
           done < ${treeSitterWasms}
         '';
       };
@@ -61,22 +62,27 @@
           cat ${treeSitterWasms}
           echo ccd
 
-          while read package 
-          do 
-            echo a
-            echo "$package"
-            ls "$package"
-            echo b
-            cp -r $wasm/. $out/tree-sitter-wasm/
+          while read wasmDir
+          do cp -r $wasmDir/. $out/tree-sitter-wasm/
           done < ${treeSitterWasms}
         '';
       };
 
-      apps.x86_64-linux.default = {
-        type = "app";
-        program = toString (writeShellScript "aabccd" ''
-          ls ${pkgs.tree-sitter.grammars}
-        '');
+      apps.x86_64-linux = {
+        dist = {
+          type = "app";
+          program = toString (writeShellScript "dist" ''
+            cd ${projectRoot}
+            nix build --offline && bun run result/dist/index.js
+          '');
+        };
+        src = {
+          type = "app";
+          program = toString (writeShellScript "src" ''
+            cd ${projectRoot}
+            bun run src/index.ts
+          '');
+        };
       };
     };
 }
