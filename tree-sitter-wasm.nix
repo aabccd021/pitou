@@ -1,4 +1,4 @@
-pkgs: treeSitters:
+pkgs: usedTreeSitters:
 with pkgs;
 let
 
@@ -32,8 +32,7 @@ let
                 (lib.strings.removePrefix "tree-sitter-" name));
         };
 
-      wasmGrammars = (builtins.removeAttrs grammars [ "tree-sitter-llvm" ]) //
-        { tree-sitter-ql-dbscheme = grammars'.tree-sitter-ql-dbscheme // { wasmName = "dbscheme"; }; };
+      wasmGrammars = (builtins.intersectAttrs usedTreeSitters grammars);
     in
     lib.mapAttrs buildWasm (wasmGrammars);
 in
