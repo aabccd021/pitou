@@ -23,6 +23,11 @@
         tree-sitter-typescript = true;
       };
 
+      mkApp = shellScript: {
+        type = "app";
+        program = toString shellScript;
+      };
+
     in
     {
 
@@ -61,20 +66,14 @@
       };
 
       apps.x86_64-linux = {
-        dist = {
-          type = "app";
-          program = toString (writeShellScript "dist" ''
-            cd ${projectRoot}
-            nix build --offline && bun run result/dist/index.js
-          '');
-        };
-        src = {
-          type = "app";
-          program = toString (writeShellScript "src" ''
-            cd ${projectRoot}
-            bun run src/index.ts
-          '');
-        };
+        dist = mkApp (writeShellScript "dist" ''
+          cd ${projectRoot}
+          nix build --offline && bun run result/dist/index.js
+        '');
+        src = mkApp (writeShellScript "src" ''
+          cd ${projectRoot}
+          bun run src/index.ts
+        '');
       };
     };
 }

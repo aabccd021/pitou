@@ -1,6 +1,6 @@
-import Parser from 'web-tree-sitter';
+import Parser, { SyntaxNode } from 'web-tree-sitter';
 
-type Language = 'nix' | 'javascript';
+type Language = 'nix' | 'javascript' | 'typescript';
 
 const makeParser = async (lang: Language) => {
   await Parser.init();
@@ -10,12 +10,38 @@ const makeParser = async (lang: Language) => {
   return parser;
 }
 
+type MyNode = {
+  leaf: true,
+  type: string,
+  text: string,
+} | {
+  leaf: false,
+  type: string,
+  children: MyNode[],
+}
+
+const walk = (node: SyntaxNode): MyNode  => {
+  if (node.children.length === 0) {
+    return {
+      leaf: true,
+      type: node.type,
+      text: node.text,
+    };
+  }
+  return {
+    leaf: false,
+    type: node.type,
+    children: node.children.map(walk),
+  };
+}
+
 const main = async () => {
-  const jsParser = await makeParser('javascript');
-  const parsed = jsParser.parse('let x = 1');
-  console.log(parsed.rootNode.toString());
-  console.log(await Bun.file(import.meta.path).text());
-  Bun.write(`${import.meta.dir}/../.temp/aab.json`, (JSON.stringify(parsed.rootNode.children, null, 2)))
+  const jsParser = await makeParser('typescript');
+  const str = await Bun.file(import.meta.path).text();
+  const parsed = jsParser.parse(str);
+  const walked = walk(parsed.rootNode);
+  Bun.write(`${import.meta.dir}/../.temp/aab.json`, (JSON.stringify(walked, null, 2)))
+  console.log(JSON.stringify(walked, null, 2));
 }
 
 await main();
