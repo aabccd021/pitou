@@ -23,16 +23,25 @@
         tree-sitter-typescript = true;
       };
 
-      mkApp = shellScript: {
-        type = "app";
-        program = toString shellScript;
-      };
+      scripts = [
+        (writeShellScriptBin "run" ''
+          cd ${projectRoot}
+          bun run src/index.ts
+        '')
+        (writeShellScriptBin "dist" ''
+          cd ${projectRoot}
+          nix build --offline && bun run result/dist/index.js
+        '')
+      ];
 
     in
     {
 
       devShell.x86_64-linux = mkShellNoCC {
-        buildInputs = [ bun npm.command ];
+        buildInputs = scripts ++ [
+          bun
+          npm.command
+        ];
         shellHook = ''
           ${setupNodeModules}
 
@@ -63,17 +72,6 @@
           do cp -r $wasmDir/. $out/tree-sitter-wasm/
           done < ${treeSitterWasms}
         '';
-      };
-
-      apps.x86_64-linux = {
-        dist = mkApp (writeShellScript "dist" ''
-          cd ${projectRoot}
-          nix build --offline && bun run result/dist/index.js
-        '');
-        src = mkApp (writeShellScript "src" ''
-          cd ${projectRoot}
-          bun run src/index.ts
-        '');
       };
     };
 }

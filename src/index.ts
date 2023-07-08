@@ -11,37 +11,21 @@ const makeParser = async (lang: Language) => {
 }
 
 type MyNode = {
-  leaf: true,
-  type: string,
-  text: string,
-} | {
-  leaf: false,
-  type: string,
+  node: SyntaxNode,
   children: MyNode[],
 }
 
 const walk = (node: SyntaxNode): MyNode  => {
-  if (node.children.length === 0) {
-    return {
-      leaf: true,
-      type: node.type,
-      text: node.text,
-    };
-  }
-  return {
-    leaf: false,
-    type: node.type,
-    children: node.children.map(walk),
-  };
+  return { node, children: node.children.map(walk), };
 }
 
 const main = async () => {
   const jsParser = await makeParser('typescript');
-  const str = await Bun.file(import.meta.path).text();
-  const parsed = jsParser.parse(str);
+  const parsed = jsParser.parse('const a = 1; const b = 2;');
   const walked = walk(parsed.rootNode);
-  Bun.write(`${import.meta.dir}/../.temp/aab.json`, (JSON.stringify(walked, null, 2)))
-  console.log(JSON.stringify(walked, null, 2));
+  await Bun.write(`${import.meta.dir}/../.temp/aab.json`, (JSON.stringify(walked, null, 2)))
+  console.log('done');
+  // console.log(JSON.stringify(walked, null, 2));
 }
 
 await main();
