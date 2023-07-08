@@ -11,12 +11,13 @@ const makeParser = async (lang: Language) => {
 }
 
 type MyNode = {
-  node: SyntaxNode,
+  node: Partial<SyntaxNode>,
   children: MyNode[],
 }
 
 const walk = (node: SyntaxNode): MyNode  => {
-  return { node, children: node.children.map(walk), };
+  const {tree, ...rest} = node;
+  return { node: rest, children: node.children.map(walk), };
 }
 
 const main = async () => {
@@ -24,7 +25,7 @@ const main = async () => {
   const parsed = jsParser.parse('const a = 1; const b = 2;');
   const walked = walk(parsed.rootNode);
   await Bun.write(`${import.meta.dir}/../.temp/aab.json`, (JSON.stringify(walked, null, 2)))
-  console.log('done');
+  console.log('dono');
   // console.log(JSON.stringify(walked, null, 2));
 }
 
