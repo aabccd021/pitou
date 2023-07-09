@@ -11,21 +11,41 @@ const makeParser = async (lang: Language) => {
 }
 
 type MyNode = {
-  node: Partial<SyntaxNode>,
-  children: MyNode[],
+  text: string,
+  type: string,
+  row: number,
+  column: number,
+};
+
+const walk = (node: SyntaxNode): MyNode[]  => {
+  if (node.children.length === 0) {
+    const {type, text, startPosition} = node;
+    return [{ text, type,  ...startPosition }];
+  }
+  console.log('===', node.text)
+  return node.children.flatMap(walk);
 }
 
-const walk = (node: SyntaxNode): MyNode  => {
-  const {tree, ...rest} = node;
-  return { node: rest, children: node.children.map(walk), };
+const example = `
+if ("aab" === "ccd") {
+  return "yoo";
 }
+`
 
 const main = async () => {
   const jsParser = await makeParser('typescript');
-  const parsed = jsParser.parse('const a = 1; const b = 2;');
+  const parsed = jsParser.parse(example);
   const walked = walk(parsed.rootNode);
   await Bun.write(`${import.meta.dir}/../.temp/aab.json`, (JSON.stringify(walked, null, 2)))
   console.log('dono');
+  const complete: string[] = [];
+  walked.reduce((prev: null | MyNode, node) => {
+    if (prev !== null) {
+    }
+    complete.push(node.text);
+    return node;
+  }, null);
+  console.log(complete);
   // console.log(JSON.stringify(walked, null, 2));
 }
 
