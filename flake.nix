@@ -32,6 +32,10 @@
           cd ${projectRoot}
           nix build --offline && bun run result/dist/index.js
         '')
+        (writeShellScriptBin "dev" ''
+          cd ${projectRoot}
+          bun --hot src/dev.ts
+        '')
       ];
 
     in
