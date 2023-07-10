@@ -40,15 +40,25 @@ export const h = <Tag extends keyof Attributes>(
   children: (Element<keyof Attributes> | string)[]
 ): Element<Tag> => ({ tag, attributes, children })
 
-export const elementToString = <Tag extends keyof Attributes>(
+const elementToLines = <Tag extends keyof Attributes>(
   element: Element<Tag> | string
-): string => {
+): string[] => {
   if (typeof element === 'string') {
-    return element;
+    return [element];
   }
   const attributes = Object.entries(element.attributes)
-    .map(([key, value]) => `${key}="${value}"`)
-    .join(' ');
-  const children = element.children.map(elementToString).join('');
-  return `<${element.tag} ${attributes}>\n  ${children}\n</${element.tag}>`;
+    .map(([key, value]) => ` ${key}="${value}"`)
+    .join('');
+  const children = element.children.flatMap(elementToLines).map((child) => `  ${child}`);
+  return [
+    `<${element.tag}${attributes}>`, 
+    ...children,
+    `</${element.tag}>`
+  ];
+}
+
+export const elementToString = <Tag extends keyof Attributes>(
+  element: Element<Tag>
+): string => {
+  return elementToLines(element).join('\n');
 }

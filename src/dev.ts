@@ -2,9 +2,9 @@
 import { withHtmlLiveReload } from "./hot";
 import { elementToString, h } from "./html";
 
-const html = h('html', {}, [
+const html = h('html', { lang: 'en', }, [
   h('h1', {}, [
-    'Hello, world! yo'
+    'Hello, world! yoo'
   ]),
 ])
 
