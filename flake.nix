@@ -7,14 +7,16 @@
     let
       pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
 
-      npm = import ./npm2nix.nix pkgs ./package-lock.json;
+      nodeModules = import ./npm2nix.nix pkgs ./package-lock.json;
 
-      nodeModulesDir = "$(${npm.command}/bin/npm root)";
+      nodeModulesDir = "$(${npm}/bin/npm root)";
+
+      npm = import ./packageOnlyNpm.nix pkgs;
 
       projectRoot = "$(${git}/bin/git rev-parse --show-toplevel)";
 
       setupNodeModules = writeShellScript "setupNodeModules" ''
-        ln -sfn ${npm.nodeModules}/node_modules ${nodeModulesDir}
+        ln -sfn ${nodeModules}/lib/node_modules ${nodeModulesDir}
       '';
 
       treeSitterWasms = import ./tree-sitter-wasm.nix pkgs {
@@ -23,28 +25,24 @@
         tree-sitter-typescript = true;
       };
 
-      scripts = [
-        (writeShellScriptBin "run" ''
-          cd ${projectRoot}
-          bun run src/index.ts
-        '')
-        (writeShellScriptBin "dist" ''
-          cd ${projectRoot}
-          nix build --offline && bun run result/dist/index.js
-        '')
-        (writeShellScriptBin "dev" ''
-          cd ${projectRoot}
-          bun --hot src/dev.ts
-        '')
-      ];
-
     in
     {
-
       devShell.x86_64-linux = mkShellNoCC {
         buildInputs = scripts ++ [
           bun
-          npm.command
+          npm
+          (writeShellScriptBin "run" ''
+            cd ${projectRoot}
+            bun run src/index.ts
+          '')
+          (writeShellScriptBin "dist" ''
+            cd ${projectRoot}
+            nix build --offline && bun run result/dist/index.js
+          '')
+          (writeShellScriptBin "dev" ''
+            cd ${projectRoot}
+            bun --hot src/dev.ts
+          '')
         ];
         shellHook = ''
           ${setupNodeModules}
