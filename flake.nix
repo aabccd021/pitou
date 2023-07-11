@@ -9,47 +9,6 @@
 
       nodeModules = import ./npm2nix.nix pkgs ./package-lock.json;
 
-      eslintNodeModules = import ./npm2nix.nix pkgs ./eslint/package-lock.json;
-
-      aab = stdenv.mkDerivation
-        {
-          name = "aab";
-          dontUnpack = true;
-          nativeBuildInputs = [ makeWrapper ];
-          buildPhase = ''
-            mkdir -p "$out/lib"
-            mkdir -p "$out/bin"
-
-            find ${eslintNodeModules}/lib/node_modules -maxdepth 1 ! -name ".bin" -exec ln -s {} "$out/lib/node_modules" \;
-            echo '{ "extends": "@antfu" }' > "$out/lib/.eslintrc.json"
-
-            for f in $out/lib/node_modules/.bin/*; do
-               path="$(readlink --canonicalize-missing "$f")"
-               ln -s "$path" "$out/bin/$(basename $f)"
-            done
-          '';
-        };
-
-      eef = pkgs.symlinkJoin {
-        name = "eef";
-        paths = [ aab ];
-        nativeBuildInputs = [ makeWrapper ];
-        postBuild = ''
-          wrapProgram "$out/bin/eslint" \
-            --add-flags "--config ${aab}/lib/.eslintrc.json"
-        '';
-      };
-
-      ccd = stdenv.mkDerivation {
-        name = "ccd";
-        dontUnpack = true;
-        buildPhase = ''
-          mkdir -p "$out/lib/node_modules/.bin"
-          ln -s "${eef}/bin/eslint" "$out/lib/node_modules/.bin/eslint"
-        '';
-      };
-
-
       nodeModulesDir = "$(${npm}/bin/npm root)";
 
       npm = import ./packageOnlyNpm.nix pkgs;
@@ -69,7 +28,7 @@
     in
     {
       devShell.x86_64-linux = mkShellNoCC {
-        buildInputs = [
+        buildInputs = scripts ++ [
           bun
           npm
           (writeShellScriptBin "run" ''
@@ -84,19 +43,14 @@
             cd ${projectRoot}
             bun --hot src/dev.ts
           '')
-          (writeShellScriptBin "lint" ''
-            ${ccd}/bin/eslint ${projectRoot}/**/*.ts
-          '')
-
         ];
         shellHook = ''
           ${setupNodeModules}
-          export PATH=${ccd}/lib/node_modules/.bin:$PATH
 
           rm -rf ${projectRoot}/tree-sitter-wasm
           mkdir ${projectRoot}/tree-sitter-wasm
           while read wasmDir
-          do cp -rfs "$wasmDir/." "${projectRoot}/tree-sitter-wasm/"
+          do cp -rs "$wasmDir/." "${projectRoot}/tree-sitter-wasm/"
           done < ${treeSitterWasms}
         '';
       };

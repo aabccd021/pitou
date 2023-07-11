@@ -1,9 +1,0 @@
-{
-  "name": "eslint",
-  "version": "1.0.0",
-  "dependencies": {
-    "@antfu/eslint-config": "^0.39.7",
-    "eslint": "^8.44.0",
-    "eslint_d": "^12.2.1"
-  }
-}
