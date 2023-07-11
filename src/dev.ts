@@ -1,18 +1,21 @@
-// example.ts
 import { withHtmlLiveReload } from "./hot";
 import { elementToString, h } from "./html";
 
 const html = h('html', { lang: 'en', }, [
-  h('h1', {}, [
-    'Hello, world! yoo'
-  ]),
+  h('link', { href:"/favicon.ico", rel:"icon" }, undefined),
+  h('link', { href:"/favicon.svg", rel:"icon", type:"image/svg+xml" }, undefined),
+  h('link', { href:"/apple-touch-icon.png", rel:"apple-touch-icon" }, undefined),
 ])
 
-const htmlString = `<!DOCTYPE html>\n${elementToString(html)}`
+const htmlString = elementToString(html);
 
 export default withHtmlLiveReload({
   fetch: () => {
-    return new Response(htmlString, {
+    const responseStr = `<!DOCTYPE html>${htmlString}`;
+    console.log('');
+    console.log('');
+    console.log(responseStr);
+    return new Response(responseStr, {
       headers: { "Content-Type": "text/html" },
     });
   },
