@@ -152,12 +152,20 @@ type LinkHTMLAttributes = {
   charset?: string;
 }
 
+
+type MetaHTMLAttributes = {
+  charset?: string;
+  'http-equiv'?: string;
+  name?: string;
+  media?: string;
+}
+
 type Attributes = {
   html: HTMLAttributes,
   title: HTMLAttributes,
   h1: HTMLAttributes,
   link: HTMLAttributes & LinkHTMLAttributes,
-  meta: HTMLAttributes,
+  meta: HTMLAttributes & MetaHTMLAttributes,
   area: HTMLAttributes,
   base: HTMLAttributes,
   br: HTMLAttributes,
@@ -174,7 +182,7 @@ type Attributes = {
 type Element<Tag extends Tags> = {
   tag: Tag,
   attributes: Attributes[Tag],
-  children: (Element<Tags> | string)[] | undefined,
+  children?: (Element<Tags> | string)[],
 }
 
 type Tags = keyof Attributes;
