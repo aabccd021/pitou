@@ -28,7 +28,7 @@
     in
     {
       devShell.x86_64-linux = mkShellNoCC {
-        buildInputs = scripts ++ [
+        buildInputs = [
           bun
           npm
           (writeShellScriptBin "run" ''
