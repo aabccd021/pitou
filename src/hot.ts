@@ -29,8 +29,8 @@ const makeLiveReloadScript = (wsUrl: string) => `
 `;
 
 export type PureWebSocketServeOptions<WebSocketDataType> = Omit<
-  WebSocketServeOptions<WebSocketDataType>,
-  "fetch" | "websocket"
+WebSocketServeOptions<WebSocketDataType>,
+"fetch" | "websocket"
 > & {
   fetch(request: Request, server: Server): Promise<Response> | Response;
   websocket?: WebSocketHandler<WebSocketDataType>;
@@ -69,9 +69,9 @@ export const withHtmlLiveReload = <
   WebSocketDataType,
   T extends PureWebSocketServeOptions<WebSocketDataType>
 >(
-    serveOptions: T,
-    options?: LiveReloadOptions
-  ): WebSocketServeOptions<WebSocketDataType> => {
+  serveOptions: T,
+  options?: LiveReloadOptions
+): WebSocketServeOptions<WebSocketDataType> => {
 
   const hostname = serveOptions.hostname ?? "0.0.0.0",
     port = serveOptions.port ?? "3000",

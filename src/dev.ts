@@ -18,9 +18,9 @@ const page = h("html", {
   }, [
     "Skip to main content"
   ]),
-  h('header', {}, [
-    h('div', {
-      class: 'title'
+  h("header", {}, [
+    h("div", {
+      class: "title"
     }, [])
   ])
 ]);

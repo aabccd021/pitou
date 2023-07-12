@@ -109,5 +109,25 @@ export const meta = [
     rel: "alternate",
     title: "aabccd021 blog",
     type: "application/json"
-  })
+  }),
+  h("script", {
+    type: "application/json"
+  }, [
+    JSON.stringify({
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://aabccd021.github.io#website",
+          url: "https://aabccd021.github.io",
+          name: "",
+          description: "Blog of aabccd021 (Muhamad Abdurahman). Mostly about software engineering",
+          inLanguage: "en-US",
+          image: [
+            "https://aabccd021.github.io/img/banner.webp"
+          ]
+        }
+      ]
+    })
+  ])
 ];
