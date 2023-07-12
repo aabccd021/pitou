@@ -7,7 +7,7 @@ const page = h('html', { lang: 'en', }, [
   h('link', { href:"/apple-touch-icon.png", rel:"apple-touch-icon" }),
   h('meta', {charset:"utf-8" }),
   h('meta', {content:"IE:edge", "http-equiv":"X-UA-Compatible" }),
-  h('meta', {content:"width:device-width,initial-scale:1", name:"viewport" }),
+    h('meta', {content:"width:device-width,initial-scale:1", name:"viewport" }),
   h('title', {}, ["aabccd021 blog"]),
   h('meta', {content:"Muhamad Abdurahman", name:"author" }),
   h('meta', {content:"aabccd021 blog", name:"title" }),

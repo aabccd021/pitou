@@ -35,7 +35,7 @@ import {elementToString, h} from './html';
 //
 // const zzz = link({ href:"/favicon.ico", rel:"icon" });
 //
-const main = async () => {
+const main = () => {
   // const jsParser = await makeParser('typescript');
   // const parsed = jsParser.parse(example);
   // const walked = walk(parsed.rootNode);
@@ -64,5 +64,5 @@ const main = async () => {
   // console.log(JSON.stringify(walked, null, 2));
 }
 
-await main();
+main();
 

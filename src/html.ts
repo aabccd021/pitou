@@ -70,7 +70,7 @@ type AriaRole =
   | 'tree'
   | 'treegrid'
   | 'treeitem'
-  | (string & {});
+  | (string & Record<string, never>);
 
 
 type HTMLAttributeReferrerPolicy =
@@ -114,7 +114,7 @@ type HTMLAttributes = {
   about?: string;
   content?: string;
   datatype?: string;
-  inlist?: any;
+  // inlist?: any;
   prefix?: string;
   property?: string;
   rel?: string;

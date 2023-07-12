@@ -6,6 +6,7 @@ import type {
 } from "bun";
 
 declare global {
+  // eslint-disable-next-line no-var
   var ws: ServerWebSocket<unknown> | undefined;
 }
 

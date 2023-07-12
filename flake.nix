@@ -32,20 +32,23 @@
           bun
           npm
           (writeShellScriptBin "run" ''
-            cd ${projectRoot}
-            bun run src/index.ts
+            bun run ${projectRoot}/src/index.ts
           '')
           (writeShellScriptBin "dist" ''
             cd ${projectRoot}
             nix build --offline && bun run result/dist/index.js
           '')
           (writeShellScriptBin "dev" ''
-            cd ${projectRoot}
-            bun --hot src/dev.ts
+            cd 
+            bun --hot ${projectRoot}/src/dev.ts
+          '')
+          (writeShellScriptBin "lint" ''
+            eslint ${projectRoot} --ignore-path ${projectRoot}/.gitignore --max-warnings 0
           '')
         ];
         shellHook = ''
           ${setupNodeModules}
+          export PATH=node_modules/.bin:$PATH
 
           rm -rf ${projectRoot}/tree-sitter-wasm
           mkdir ${projectRoot}/tree-sitter-wasm
