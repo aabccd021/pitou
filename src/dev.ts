@@ -19,9 +19,23 @@ const page = h("html", {
     "Skip to main content"
   ]),
   h("header", {}, [
+
     h("div", {
       class: "title"
-    }, [])
+    }, [
+      h("p", {}, [
+        "aabccd021 blog"
+      ])
+    ]),
+
+    h("nav", {}, [
+      h("a", {
+        class: "nav-item",
+        href: "/",
+        "aria-current": "page"
+      }, [])
+    ])
+
   ])
 ]);
 
