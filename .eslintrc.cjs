@@ -30,6 +30,7 @@ module.exports = {
     'no-inline-comments': 'off',
     'max-lines-per-function': 'off',
     'max-statements': 'off',
+    'quotes': 'off',
   },
   root: true,
 };
