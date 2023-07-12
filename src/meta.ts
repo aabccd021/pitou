@@ -1,116 +1,116 @@
 import {
-  h
+  link, meta, script, title
 } from "./html";
 
-export const meta = [
-  h("link", {
+export const metas = [
+  link({
     href: "/favicon.ico",
     rel: "icon"
   }),
-  h("link", {
+  link({
     href: "/favicon.svg",
     rel: "icon",
     type: "image/svg+xml"
   }),
-  h("link", {
+  link({
     href: "/apple-touch-icon.png",
     rel: "apple-touch-icon"
   }),
-  h("meta", {
+  meta({
     charset: "utf-8"
   }),
-  h("meta", {
+  meta({
     content: "IE:edge",
     "http-equiv": "X-UA-Compatible"
   }),
-  h("meta", {
+  meta({
     content: "width:device-width,initial-scale:1",
     name: "viewport"
   }),
-  h("title", {}, [
+  title({}, [
     "aabccd021 blog"
   ]),
 
-  h("meta", {
+  meta({
     content: "Muhamad Abdurahman",
     name: "author"
   }),
-  h("meta", {
+  meta({
     content: "aabccd021 blog",
     name: "title"
   }),
-  h("meta", {
+  meta({
     content: "Blog of aabccd021 (Muhamad Abdurahman). Mostly about software engineering",
     name: "description"
   }),
-  h("meta", {
+  meta({
     content: "eleventy",
     name: "generator"
   }),
-  h("meta", {
+  meta({
     content: "website",
     property: "og:type"
   }),
-  h("meta", {
+  meta({
     content: "https://aabccd021.github.io/",
     property: "og:url"
   }),
-  h("meta", {
+  meta({
     content: "en_US",
     property: "og:locale"
   }),
-  h("meta", {
+  meta({
     content: "aabccd021 blog",
     property: "og:title"
   }),
-  h("meta", {
+  meta({
     content: "Blog of aabccd021 (Muhamad Abdurahman). Mostly about software engineering",
     property: "og:description"
   }),
-  h("meta", {
+  meta({
     content: "https://aabccd021.github.io/img/banner.webp'",
     property: "og:image"
   }),
-  h("meta", {
+  meta({
     content: "summary",
     name: "twitter:card"
   }),
-  h("meta", {
+  meta({
     content: "https://aabccd021.github.io/",
     name: "twitter:url"
   }),
-  h("meta", {
+  meta({
     content: "aabccd021 blog",
     name: "twitter:title"
   }),
-  h("meta", {
+  meta({
     content: "Blog of aabccd021 (Muhamad Abdurahman). Mostly about software engineering",
     name: "twitter:description"
   }),
-  h("meta", {
+  meta({
     content: "https://aabccd021.github.io/img/banner.webp",
     name: "twitter:image"
   }),
-  h("link", {
+  link({
     href: "https://aabccd021.github.io/ rel:canonical"
   }),
-  h("meta", {
+  meta({
     content: "aabccd021 blog",
     property: "og:site_name"
   }),
-  h("link", {
+  link({
     href: "/feed/feed.xml",
     rel: "alternate",
     title: "aabccd021 blog",
     type: "application/atom+xml"
   }),
-  h("link", {
+  link({
     href: "/feed/feed.json",
     rel: "alternate",
     title: "aabccd021 blog",
     type: "application/json"
   }),
-  h("script", {
+  script({
     type: "application/json"
   }, [
     JSON.stringify({

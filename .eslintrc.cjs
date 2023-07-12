@@ -33,6 +33,7 @@ module.exports = {
     'max-statements': 'off',
     'quotes': 'off',
     'sort-imports': 'off',
+    'id-length': 'off',
     '@typescript-eslint/block-spacing': 'error',
     '@typescript-eslint/brace-style': 'error',
     '@typescript-eslint/comma-dangle': 'error',

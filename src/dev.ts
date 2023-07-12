@@ -1,27 +1,29 @@
 import {
-  elementToString, h
+  a,
+  div,
+  elementToString, h1, html, img, li, main, nav, picture, source, time, ul, header, p
 } from "./html";
 
 import {
   withHtmlLiveReload
 } from "./hot";
 import {
-  meta
+  metas
 } from "./meta";
 
-const header = h("header", {}, [
+const blogHeader = header({}, [
 
-  h("div", {
+  div({
     class: "title"
   }, [
-    h("p", {}, [
+    p({}, [
       "aabccd021 blog"
     ])
   ]),
 
-  h("nav", {}, [
+  nav({}, [
 
-    h("a", {
+    a({
       class: "nav-item",
       href: "/",
       "aria-current": "page"
@@ -30,14 +32,14 @@ const header = h("header", {}, [
     ]),
 
 
-    h("a", {
+    a({
       class: "nav-item",
       href: "/tags/"
     }, [
       "Tags"
     ]),
 
-    h("a", {
+    a({
       class: "nav-item",
       href: "/about/"
     }, [
@@ -45,7 +47,7 @@ const header = h("header", {}, [
     ]),
 
 
-    h("a", {
+    a({
       class: "nav-item",
       href: "/feed/feed.xml",
       rel: "alternate",
@@ -58,38 +60,38 @@ const header = h("header", {}, [
 
 ]);
 
-const page = h("html", {
+const page = html({
   lang: "en"
 }, [
-  ...meta,
-  h("a", {
+  ...metas,
+  a({
     class: "skip"
   }, [
     "Skip to main content"
   ]),
-  header,
-  h("main", {
+  blogHeader,
+  main({
     id: "main"
   }, [
-    h("h1", {}, [
+    h1({}, [
       "Posts"
     ]),
-    h("ul", {
+    ul({
       class: "postlist reversed"
     }, [
-      h("li", {
+      li({
         class: "postlist-item"
       }, [
-        h("picture", {}, [
-          h("source", {
+        picture({}, [
+          source({
             srcset: "/img/BMWTtZw5Gk-1200.avif 1200w",
             type: "image/avif"
           }),
-          h("source", {
+          source({
             srcset: "/img/BMWTtZw5Gk-1200.webp 1200w",
             type: "image/webp"
           }),
-          h("img", {
+          img({
             src: "/img/BMWTtZw5Gk-1200.svg",
             alt: "command to create new GitHub repository",
             decoding: "async",
@@ -99,14 +101,14 @@ const page = h("html", {
           })
         ]),
 
-        h("a", {
+        a({
           class: "postlist-link",
           href: "/blog/create-new-github-repository-from-cli-with-gh-command/"
         }, [
           "Create new GitHub repository from CLI with gh command"
         ]),
 
-        h("time", {
+        time({
           class: "postlist-date",
           datetime: "2023-02-05"
         }, [

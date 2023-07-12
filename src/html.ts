@@ -1048,6 +1048,62 @@ export function h <Tag extends Tags> (
 
 }
 
+export const hVoid = <Tag extends VoidTags>(tag: Tag) => (
+  attributes: Partial<Attributes[Tag] & HTMLAttributes & AriaAttributes>
+): Element<Tag> => ({
+  tag,
+  attributes
+});
+
+export const hNonVoid = <Tag extends NonVoidTags>(tag: Tag) => (
+  attributes: Partial<Attributes[Tag] & HTMLAttributes & AriaAttributes>,
+  children: (Element<Tags> | string)[]
+): Element<Tag> => ({
+  tag,
+  attributes,
+  children
+});
+
+export const picture = hNonVoid("picture");
+
+export const source = hVoid("source");
+
+export const img = hVoid("img");
+
+export const div = hNonVoid("div");
+
+export const header = hNonVoid("header");
+
+export const nav = hNonVoid("nav");
+
+export const a = hNonVoid("a");
+
+export const html = hNonVoid("html");
+
+export const time = hNonVoid("time");
+
+export const h1 = hNonVoid("h1");
+
+export const ul = hNonVoid("ul");
+
+export const li = hNonVoid("li");
+
+export const main = hNonVoid("main");
+
+export const p = hNonVoid("p");
+
+export const meta = hVoid("meta");
+
+export const link = hVoid("link");
+
+export const title = hNonVoid("title");
+
+export const body = hNonVoid("body");
+
+export const head = hNonVoid("head");
+
+export const script = hNonVoid("script");
+
 export const elementToString = <Tag extends Tags>(
   element: Element<Tag> | string
 ): string => {
