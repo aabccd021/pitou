@@ -6,7 +6,7 @@ import type {
 } from "bun";
 
 declare global {
-  // eslint-disable-next-line no-var
+  // eslint-disable-next-line no-var, vars-on-top, init-declarations
   var ws: ServerWebSocket<unknown> | undefined;
 }
 
@@ -95,7 +95,7 @@ export const withHtmlLiveReload = <
           );
 
         }
-        return;
+        return undefined;
 
       }
 
@@ -109,9 +109,9 @@ export const withHtmlLiveReload = <
 
       }
 
-      const originalHtml = await response.text(),
-        liveReloadScript = makeLiveReloadScript(wsUrl),
-        htmlWithLiveReload = originalHtml + liveReloadScript;
+      const originalHtml = await response.text();
+      const liveReloadScript = makeLiveReloadScript(wsUrl);
+      const htmlWithLiveReload = originalHtml + liveReloadScript;
 
       return new Response(
         htmlWithLiveReload, response

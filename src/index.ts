@@ -58,33 +58,34 @@ const main = () => {
    *
    */
   const page = h(
-      "html", {
-        lang: "en"
-      }, [
-        h(
-          "link", {
-            href: "/favicon.ico",
-            rel: "icon"
-          }
-        ),
-        h(
-          "link", {
-            href: "/favicon.svg",
-            rel: "icon",
-            type: "image/svg+xml"
-          }
-        ),
-        h(
-          "link", {
-            href: "/apple-touch-icon.png",
-            rel: "apple-touch-icon"
-          }
-        )
-      ]
-    ),
+    "html", {
+      lang: "en"
+    }, [
+      h(
+        "link", {
+          href: "/favicon.ico",
+          rel: "icon"
+        }
+      ),
+      h(
+        "link", {
+          href: "/favicon.svg",
+          rel: "icon",
+          type: "image/svg+xml"
+        }
+      ),
+      h(
+        "link", {
+          href: "/apple-touch-icon.png",
+          rel: "apple-touch-icon"
+        }
+      )
+    ]
+  );
 
-    htmlString = elementToString(page);
+  const htmlString = elementToString(page);
 
+  // eslint-disable-next-line no-console
   console.log(htmlString);
 
 

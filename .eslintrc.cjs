@@ -28,6 +28,8 @@ module.exports = {
     'capitalized-comments': 'off',
     'line-comment-position': 'off',
     'no-inline-comments': 'off',
+    'max-lines-per-function': 'off',
+    'max-statements': 'off',
   },
   root: true,
 };
