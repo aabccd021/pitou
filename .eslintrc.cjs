@@ -1,6 +1,7 @@
 module.exports = {
   extends: [
     'eslint:all', 
+    'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/strict',
     'plugin:@typescript-eslint/strict-type-checked',
     'plugin:@typescript-eslint/stylistic',
@@ -31,6 +32,7 @@ module.exports = {
     'max-lines-per-function': 'off',
     'max-statements': 'off',
     'quotes': 'off',
+    "sort-imports": "off",
   },
   root: true,
 };
