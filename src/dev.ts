@@ -1,8 +1,14 @@
-import { elementToString, h } from "./html";
+import {
+  elementToString, h
+} from "./html";
 
-import { withHtmlLiveReload } from "./hot";
+import {
+  withHtmlLiveReload
+} from "./hot";
 
-const page = h("html", { lang: "en" }, [
+const page = h("html", {
+  lang: "en"
+}, [
   h("link", {
     href: "/favicon.ico",
     rel: "icon"
@@ -16,7 +22,9 @@ const page = h("html", { lang: "en" }, [
     href: "/apple-touch-icon.png",
     rel: "apple-touch-icon"
   }),
-  h("meta", { charset: "utf-8" }),
+  h("meta", {
+    charset: "utf-8"
+  }),
   h("meta", {
     content: "IE:edge",
     "http-equiv": "X-UA-Compatible"
@@ -25,7 +33,10 @@ const page = h("html", { lang: "en" }, [
     content: "width:device-width,initial-scale:1",
     name: "viewport"
   }),
-  h("title", {}, ["aabccd021 blog"]),
+  h("title", {}, [
+    "aabccd021 blog"
+  ]),
+
   h("meta", {
     content: "Muhamad Abdurahman",
     name: "author"
@@ -86,11 +97,30 @@ const page = h("html", { lang: "en" }, [
     content: "https://aabccd021.github.io/img/banner.webp",
     name: "twitter:image"
   }),
-  h("link", { href: "https://aabccd021.github.io/ rel:canonical" }),
+  h("link", {
+    href: "https://aabccd021.github.io/ rel:canonical"
+  }),
   h("meta", {
     content: "aabccd021 blog",
     property: "og:site_name"
-  })
+  }),
+  h("link", {
+    href: "/feed/feed.xml",
+    rel: "alternate",
+    title: "aabccd021 blog",
+    type: "application/atom+xml"
+  }),
+  h("link", {
+    href: "/feed/feed.json",
+    rel: "alternate",
+    title: "aabccd021 blog",
+    type: "application/json"
+  }),
+  h("a", {
+    classname: "skip"
+  }, [
+    "Skip to main content"
+  ])
 ]);
 
 const htmlString = elementToString(page);
@@ -100,7 +130,11 @@ export default withHtmlLiveReload({
 
     const responseStr = `<!DOCTYPE html>${htmlString}`;
     return new Response(
-      responseStr, { headers: { "Content-Type": "text/html" } }
+      responseStr, {
+        headers: {
+          "Content-Type": "text/html"
+        }
+      }
     );
 
   }

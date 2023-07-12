@@ -89,7 +89,9 @@ export const withHtmlLiveReload = <
         if (!upgraded) {
 
           return new Response(
-            "Failed to upgrade websocket connection for live reload", { status: 400 }
+            "Failed to upgrade websocket connection for live reload", {
+              status: 400
+            }
           );
 
         }

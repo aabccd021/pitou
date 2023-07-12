@@ -1,5 +1,7 @@
 // Import Parser, { SyntaxNode } from 'web-tree-sitter';
-import { elementToString, h } from "./html";
+import {
+  elementToString, h
+} from "./html";
 
 // Type Language = 'nix' | 'javascript' | 'typescript';
 
@@ -56,7 +58,9 @@ const main = () => {
    *
    */
   const page = h(
-      "html", { lang: "en" }, [
+      "html", {
+        lang: "en"
+      }, [
         h(
           "link", {
             href: "/favicon.ico",
