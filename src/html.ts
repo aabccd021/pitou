@@ -158,21 +158,64 @@ type Attributes = {
   h1: HTMLAttributes,
   link: HTMLAttributes & LinkHTMLAttributes,
   meta: HTMLAttributes,
+  area: HTMLAttributes,
+  base: HTMLAttributes,
+  br: HTMLAttributes,
+  col: HTMLAttributes,
+  embed: HTMLAttributes,
+  hr: HTMLAttributes,
+  img: HTMLAttributes,
+  input: HTMLAttributes,
+  source: HTMLAttributes,
+  track: HTMLAttributes,
+  wbr: HTMLAttributes,
 }
 
-type Element<Tag extends keyof Attributes> = {
+type Element<Tag extends Tags> = {
   tag: Tag,
   attributes: Attributes[Tag],
-  children: (Element<keyof Attributes> | string)[] | undefined,
+  children: (Element<Tags> | string)[] | undefined,
 }
 
-export const h = <Tag extends keyof Attributes>(
+type Tags = keyof Attributes;
+
+type VoidTags = 
+  "area" |
+  "base" |
+  "br" |
+  "col" |
+  "embed" |
+  "hr" |
+  "img" |
+  "input" |
+  "link" |
+  "meta" |
+  "source" |
+  "track" |
+  "wbr";
+
+type NonVoidTags = Exclude<Tags, VoidTags>;
+
+export function h <Tag extends VoidTags>(
   tag: Tag,
   attributes: Attributes[Tag],
-  children: (Element<keyof Attributes> | string)[] | undefined
-): Element<Tag> => ({ tag, attributes, children })
+): Element<Tag>;
 
-export const elementToString = <Tag extends keyof Attributes>(
+export function h <Tag extends NonVoidTags>(
+  tag: Tag,
+  attributes: Attributes[Tag],
+  children: (Element<Tags> | string)[]
+): Element<Tag>;
+
+export function h <Tag extends Tags>(
+  tag: Tag,
+  attributes: Attributes[Tag],
+  children?: (Element<Tags> | string)[]
+): Element<Tag> { 
+  return { tag, attributes, children };
+}
+
+export const elementToString = <Tag extends Tags>(
   element: Element<Tag> | string
 ): string => {
   if (typeof element === 'string') {
@@ -181,10 +224,10 @@ export const elementToString = <Tag extends keyof Attributes>(
   const attributes = Object.entries(element.attributes)
     .map(([key, value]) => ` ${key}="${value}"`)
     .join('');
+  const openTag = `<${element.tag}${attributes}>`;
   if (element.children === undefined) {
-    return `<${element.tag}${attributes}>`
+    return openTag;
   }
-  const children = element.children.map(elementToString).join('');
-  return `<${element.tag}${attributes}>${children}</${element.tag}>`
+  const childrenStr = element.children.map(elementToString).join('');
+  return `${openTag}${childrenStr}</${element.tag}>`
 }
-

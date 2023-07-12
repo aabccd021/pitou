@@ -1,10 +1,10 @@
 import { withHtmlLiveReload } from "./hot";
-import { elementToString, h } from "./html";
+import { elementToString, h as tag } from "./html";
 
-const html = h('html', { lang: 'en', }, [
-  h('link', { href:"/favicon.ico", rel:"icon" }, undefined),
-  h('link', { href:"/favicon.svg", rel:"icon", type:"image/svg+xml" }, undefined),
-  h('link', { href:"/apple-touch-icon.png", rel:"apple-touch-icon" }, undefined),
+const html = tag('html', { lang: 'en', }, [
+  tag('link', { href:"/favicon.ico", rel:"icon" }),
+  tag('link', { href:"/favicon.svg", rel:"icon", type:"image/svg+xml" }),
+  tag('link', { href:"/apple-touch-icon.png", rel:"apple-touch-icon" }),
 ])
 
 const htmlString = elementToString(html);
