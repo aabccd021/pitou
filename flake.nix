@@ -32,7 +32,7 @@
           bun
           npm
           (writeShellScriptBin "run" ''
-            bun run ${projectRoot}/src/index.ts
+            bun run ${projectRoot}/src/index.ts "$@"
           '')
           (writeShellScriptBin "dist" ''
             cd ${projectRoot}
@@ -40,10 +40,10 @@
           '')
           (writeShellScriptBin "dev" ''
             cd 
-            bun --hot ${projectRoot}/src/dev.ts
+            bun --hot ${projectRoot}/src/dev.ts "$@"
           '')
           (writeShellScriptBin "lint" ''
-            eslint ${projectRoot} --ignore-path ${projectRoot}/.gitignore --max-warnings 0
+            eslint ${projectRoot} --ignore-path ${projectRoot}/.gitignore --max-warnings 0 "$@"
           '')
         ];
         shellHook = ''

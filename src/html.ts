@@ -1,91 +1,91 @@
-type Booleanish = boolean | 'true' | 'false';
+type Booleanish = boolean | "true" | "false";
 
 type AriaRole =
-  | 'alert'
-  | 'alertdialog'
-  | 'application'
-  | 'article'
-  | 'banner'
-  | 'button'
-  | 'cell'
-  | 'checkbox'
-  | 'columnheader'
-  | 'combobox'
-  | 'complementary'
-  | 'contentinfo'
-  | 'definition'
-  | 'dialog'
-  | 'directory'
-  | 'document'
-  | 'feed'
-  | 'figure'
-  | 'form'
-  | 'grid'
-  | 'gridcell'
-  | 'group'
-  | 'heading'
-  | 'img'
-  | 'link'
-  | 'list'
-  | 'listbox'
-  | 'listitem'
-  | 'log'
-  | 'main'
-  | 'marquee'
-  | 'math'
-  | 'menu'
-  | 'menubar'
-  | 'menuitem'
-  | 'menuitemcheckbox'
-  | 'menuitemradio'
-  | 'navigation'
-  | 'none'
-  | 'note'
-  | 'option'
-  | 'presentation'
-  | 'progressbar'
-  | 'radio'
-  | 'radiogroup'
-  | 'region'
-  | 'row'
-  | 'rowgroup'
-  | 'rowheader'
-  | 'scrollbar'
-  | 'search'
-  | 'searchbox'
-  | 'separator'
-  | 'slider'
-  | 'spinbutton'
-  | 'status'
-  | 'switch'
-  | 'tab'
-  | 'table'
-  | 'tablist'
-  | 'tabpanel'
-  | 'term'
-  | 'textbox'
-  | 'timer'
-  | 'toolbar'
-  | 'tooltip'
-  | 'tree'
-  | 'treegrid'
-  | 'treeitem'
+  | "alert"
+  | "alertdialog"
+  | "application"
+  | "article"
+  | "banner"
+  | "button"
+  | "cell"
+  | "checkbox"
+  | "columnheader"
+  | "combobox"
+  | "complementary"
+  | "contentinfo"
+  | "definition"
+  | "dialog"
+  | "directory"
+  | "document"
+  | "feed"
+  | "figure"
+  | "form"
+  | "grid"
+  | "gridcell"
+  | "group"
+  | "heading"
+  | "img"
+  | "link"
+  | "list"
+  | "listbox"
+  | "listitem"
+  | "log"
+  | "main"
+  | "marquee"
+  | "math"
+  | "menu"
+  | "menubar"
+  | "menuitem"
+  | "menuitemcheckbox"
+  | "menuitemradio"
+  | "navigation"
+  | "none"
+  | "note"
+  | "option"
+  | "presentation"
+  | "progressbar"
+  | "radio"
+  | "radiogroup"
+  | "region"
+  | "row"
+  | "rowgroup"
+  | "rowheader"
+  | "scrollbar"
+  | "search"
+  | "searchbox"
+  | "separator"
+  | "slider"
+  | "spinbutton"
+  | "status"
+  | "switch"
+  | "tab"
+  | "table"
+  | "tablist"
+  | "tabpanel"
+  | "term"
+  | "textbox"
+  | "timer"
+  | "toolbar"
+  | "tooltip"
+  | "tree"
+  | "treegrid"
+  | "treeitem"
   | (string & Record<string, never>);
 
 
 type HTMLAttributeReferrerPolicy =
-  | ''
-  | 'no-referrer'
-  | 'no-referrer-when-downgrade'
-  | 'origin'
-  | 'origin-when-cross-origin'
-  | 'same-origin'
-  | 'strict-origin'
-  | 'strict-origin-when-cross-origin'
-  | 'unsafe-url';
+  | ""
+  | "no-referrer"
+  | "no-referrer-when-downgrade"
+  | "origin"
+  | "origin-when-cross-origin"
+  | "same-origin"
+  | "strict-origin"
+  | "strict-origin-when-cross-origin"
+  | "unsafe-url";
 
 // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/23c436771a06e6bb72edc427c57cfd36b686468a/types/react/index.d.ts#L1920-L1938
-type HTMLAttributes = {
+interface HTMLAttributes {
 
   // Standard HTML Attributes
   accesskey?: string;
@@ -102,10 +102,10 @@ type HTMLAttributes = {
   placeholder?: string;
   slot?: string;
   spellcheck?: Booleanish;
-  // style?: CSSProperties;
+  // Style?: CSSProperties;
   tabindex?: number;
   title?: string;
-  translate?: 'yes' | 'no';
+  translate?: "yes" | "no";
 
   // WAI-ARIA
   role?: AriaRole;
@@ -114,7 +114,7 @@ type HTMLAttributes = {
   about?: string;
   content?: string;
   datatype?: string;
-  // inlist?: any;
+  // Inlist?: any;
   prefix?: string;
   property?: string;
   rel?: string;
@@ -128,7 +128,8 @@ type HTMLAttributes = {
    * Hints at the type of data that might be entered by the user while editing the element or its contents
    * @see https://html.spec.whatwg.org/multipage/interaction.html#input-modalities:-the-inputmode-attribute
    */
-  inputMode?: 'none' | 'text' | 'tel' | 'url' | 'email' | 'numeric' | 'decimal' | 'search';
+  inputMode?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search";
+
   /**
    * Specify that a standard HTML element should behave like a defined custom built-in element
    * @see https://html.spec.whatwg.org/multipage/custom-elements.html#attr-is
@@ -136,7 +137,7 @@ type HTMLAttributes = {
   is?: string;
 }
 
-type LinkHTMLAttributes = {
+interface LinkHTMLAttributes {
   as?: string;
   crossorigin?: "anonymous" | "use-credentials" | "";
   fetchpriority?: "high" | "low" | "auto";
@@ -153,14 +154,14 @@ type LinkHTMLAttributes = {
 }
 
 
-type MetaHTMLAttributes = {
+interface MetaHTMLAttributes {
   charset?: string;
-  'http-equiv'?: string;
+  "http-equiv"?: string;
   name?: string;
   media?: string;
 }
 
-type Attributes = {
+interface Attributes {
   html: HTMLAttributes,
   title: HTMLAttributes,
   h1: HTMLAttributes,
@@ -179,7 +180,7 @@ type Attributes = {
   wbr: HTMLAttributes,
 }
 
-type Element<Tag extends Tags> = {
+interface Element<Tag extends Tags> {
   tag: Tag,
   attributes: Attributes[Tag],
   children?: (Element<Tags> | string)[],
@@ -187,7 +188,7 @@ type Element<Tag extends Tags> = {
 
 type Tags = keyof Attributes;
 
-type VoidTags = 
+type VoidTags =
   "area" |
   "base" |
   "br" |
@@ -215,27 +216,42 @@ export function h <Tag extends NonVoidTags>(
   children: (Element<Tags> | string)[]
 ): Element<Tag>;
 
-export function h <Tag extends Tags>(
+export function h <Tag extends Tags> (
   tag: Tag,
   attributes: Attributes[Tag],
   children?: (Element<Tags> | string)[]
-): Element<Tag> { 
-  return { tag, attributes, children };
+): Element<Tag> {
+
+  return {
+    tag,
+    attributes,
+    children
+  };
+
 }
 
 export const elementToString = <Tag extends Tags>(
   element: Element<Tag> | string
 ): string => {
-  if (typeof element === 'string') {
+
+  if (typeof element === "string") {
+
     return element;
+
   }
-  const attributes = Object.entries(element.attributes)
-    .map(([key, value]) => ` ${key}="${value}"`)
-    .join('');
-  const openTag = `<${element.tag}${attributes}>`;
+  const attributes = Object.entries(element.attributes).
+      map(([
+        key,
+        value
+      ]) => ` ${key}="${value}"`).
+      join(""),
+    openTag = `<${element.tag}${attributes}>`;
   if (element.children === undefined) {
+
     return openTag;
+
   }
-  const childrenStr = element.children.map(elementToString).join('');
-  return `${openTag}${childrenStr}</${element.tag}>`
-}
+  const childrenStr = element.children.map(elementToString).join("");
+  return `${openTag}${childrenStr}</${element.tag}>`;
+
+};

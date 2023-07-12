@@ -2,7 +2,7 @@ import type {
   Server,
   ServerWebSocket,
   WebSocketHandler,
-  WebSocketServeOptions,
+  WebSocketServeOptions
 } from "bun";
 
 declare global {
@@ -36,13 +36,14 @@ export type PureWebSocketServeOptions<WebSocketDataType> = Omit<
   websocket?: WebSocketHandler<WebSocketDataType>;
 };
 
-export type LiveReloadOptions = {
+export interface LiveReloadOptions {
+
   /**
    * URL path used for websocket connection
    * @default "__bun_live_reload_websocket__"
    */
   readonly wsPath?: string;
-};
+}
 
 /**
  * Automatically reload html when Bun server hot reloads
@@ -68,47 +69,62 @@ export const withHtmlLiveReload = <
   WebSocketDataType,
   T extends PureWebSocketServeOptions<WebSocketDataType>
 >(
-  serveOptions: T,
-  options?: LiveReloadOptions
-): WebSocketServeOptions<WebSocketDataType> => {
-  const hostname = serveOptions.hostname ?? "0.0.0.0";
-  const port = serveOptions.port ?? "3000";
-  const wsPath = options?.wsPath ?? "__bun_live_reload_websocket__";
-  const wsUrl = `${hostname}:${port}/${wsPath}`;
+    serveOptions: T,
+    options?: LiveReloadOptions
+  ): WebSocketServeOptions<WebSocketDataType> => {
+
+  const hostname = serveOptions.hostname ?? "0.0.0.0",
+    port = serveOptions.port ?? "3000",
+    wsPath = options?.wsPath ?? "__bun_live_reload_websocket__",
+    wsUrl = `${hostname}:${port}/${wsPath}`;
 
   return {
     ...serveOptions,
     fetch: async (req, server) => {
+
       if (req.url === `http://${wsUrl}`) {
+
         const upgraded = server.upgrade(req);
 
         if (!upgraded) {
+
           return new Response(
-            "Failed to upgrade websocket connection for live reload",
-            { status: 400 }
+            "Failed to upgrade websocket connection for live reload", { status: 400 }
           );
+
         }
         return;
+
       }
 
-      const response = await serveOptions.fetch(req, server);
+      const response = await serveOptions.fetch(
+        req, server
+      );
 
       if (response.headers.get("Content-Type") !== "text/html") {
+
         return response;
+
       }
 
-      const originalHtml = await response.text();
-      const liveReloadScript = makeLiveReloadScript(wsUrl);
-      const htmlWithLiveReload = originalHtml + liveReloadScript;
+      const originalHtml = await response.text(),
+        liveReloadScript = makeLiveReloadScript(wsUrl),
+        htmlWithLiveReload = originalHtml + liveReloadScript;
 
-      return new Response(htmlWithLiveReload, response);
+      return new Response(
+        htmlWithLiveReload, response
+      );
+
     },
     websocket: {
       ...serveOptions.websocket,
       open: async (ws) => {
+
         globalThis.ws = ws;
         await serveOptions.websocket?.open?.(ws);
-      },
-    },
+
+      }
+    }
   };
+
 };
