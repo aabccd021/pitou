@@ -1,13 +1,13 @@
 import { withHtmlLiveReload } from "./hot";
-import { elementToString, h as tag } from "./html";
+import { elementToString, html, link } from "./html";
 
-const html = tag('html', { lang: 'en', }, [
-  tag('link', { href:"/favicon.ico", rel:"icon" }),
-  tag('link', { href:"/favicon.svg", rel:"icon", type:"image/svg+xml" }),
-  tag('link', { href:"/apple-touch-icon.png", rel:"apple-touch-icon" }),
+const page = html({ lang: 'en', }, [
+  link({ href:"/favicon.ico", rel:"icon" }),
+  link({ href:"/favicon.svg", rel:"icon", type:"image/svg+xml" }),
+  link({ href:"/apple-touch-icon.png", rel:"apple-touch-icon" }),
 ])
 
-const htmlString = elementToString(html);
+const htmlString = elementToString(page);
 
 export default withHtmlLiveReload({
   fetch: () => {

@@ -1,7 +1,7 @@
 {
   "name": "pitou",
   "version": "0.0.1",
-  "module": "src/index.ts",
+  "sideEffects": false,
   "type": "module",
   "devDependencies": {
     "bun-types": "^0.5.0"

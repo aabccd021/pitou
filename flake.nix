@@ -60,10 +60,15 @@
         src = ./src;
         unpackPhase = ''
           cp -r "$src" ./src
+          cp ${./package.json} ./package.json
         '';
         configurePhase = setupNodeModules;
         buildPhase = ''
-          ${bun}/bin/bun build ./src/index.ts --target bun --outfile ./dist/index.js
+          cat ./package.json
+          ${bun}/bin/bun build ./src/index.ts \
+            --splitting \
+            --target browser \
+            --outdir ./dist
         '';
         installPhase = ''
           mkdir -p $out/dist

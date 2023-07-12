@@ -196,6 +196,8 @@ type VoidTags =
 
 type NonVoidTags = Exclude<Tags, VoidTags>;
 
+type Children = (Element<Tags> | string)[];
+
 export function h <Tag extends VoidTags>(
   tag: Tag,
   attributes: Attributes[Tag],
@@ -204,16 +206,20 @@ export function h <Tag extends VoidTags>(
 export function h <Tag extends NonVoidTags>(
   tag: Tag,
   attributes: Attributes[Tag],
-  children: (Element<Tags> | string)[]
+  children: Children
 ): Element<Tag>;
 
 export function h <Tag extends Tags>(
   tag: Tag,
   attributes: Attributes[Tag],
-  children?: (Element<Tags> | string)[]
+  children?: Children
 ): Element<Tag> { 
   return { tag, attributes, children };
 }
+
+export const link = (attributes: Attributes['link']) => h('link', attributes);
+
+export const html = (attributes: Attributes['html'], children: Children) => h('html', attributes, children);
 
 export const elementToString = <Tag extends Tags>(
   element: Element<Tag> | string
