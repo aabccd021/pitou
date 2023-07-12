@@ -480,7 +480,7 @@ interface DetailsHTMLAttributes {
 
 interface DelHTMLAttributes {
   cite: string;
-  dateTime: string;
+  datetime: string;
 }
 
 interface DialogHTMLAttributes {
@@ -550,14 +550,14 @@ interface ImgHTMLAttributes {
   referrerPolicy: HTMLAttributeReferrerPolicy;
   sizes: string;
   src: string;
-  srcSet: string;
+  srcset: string;
   useMap: string;
   width: number | string;
 }
 
 interface InsHTMLAttributes {
   cite: string;
-  dateTime: string;
+  datetime: string;
 }
 
 type HTMLInputTypeAttribute =
@@ -773,7 +773,7 @@ interface SourceHTMLAttributes {
   media: string;
   sizes: string;
   src: string;
-  srcSet: string;
+  srcset: string;
   type: string;
   width: number | string;
 }
@@ -835,7 +835,7 @@ interface ThHTMLAttributes {
 }
 
 interface TimeHTMLAttributes {
-  dateTime: string;
+  datetime: string;
 }
 
 interface TrackHTMLAttributes {
