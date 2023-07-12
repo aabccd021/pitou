@@ -64,15 +64,15 @@
         '';
         configurePhase = setupNodeModules;
         buildPhase = ''
-          cat ./package.json
           ${bun}/bin/bun build ./src/index.ts \
             --splitting \
             --target browser \
-            --outdir ./dist
+            --no-bundle \
+            --outfile ./dist/index.js
         '';
         installPhase = ''
           mkdir -p $out/dist
-          cp dist/index.js $out/dist/index.js
+          cp -r dist $out
 
           mkdir -p $out/tree-sitter-wasm
           while read wasmDir
