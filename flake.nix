@@ -64,11 +64,7 @@
         '';
         configurePhase = setupNodeModules;
         buildPhase = ''
-          ${bun}/bin/bun build ./src/index.ts \
-            --splitting \
-            --target browser \
-            --no-bundle \
-            --outfile ./dist/index.js
+          ${bun}/bin/bun build ./src/index.ts --splitting --target browser --outdir ./dist
         '';
         installPhase = ''
           mkdir -p $out/dist
