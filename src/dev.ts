@@ -124,17 +124,43 @@ const page = html({
 
 const htmlString = elementToString(page);
 
-export default withHtmlLiveReload({
-  fetch: () => {
 
-    const responseStr = `<!DOCTYPE html>${htmlString}`;
-    return new Response(
-      responseStr, {
+export default withHtmlLiveReload({
+  fetch: (request) => {
+
+    const path = new URL(request.url).pathname;
+    if (path === "/") {
+
+      return new Response(`<!DOCTYPE html>${htmlString}`, {
         headers: {
           "Content-Type": "text/html"
         }
-      }
-    );
+      });
+
+    }
+
+    if (path === "/style.css") {
+
+      return new Response(`
+html {
+  max-width: 40em;
+  font-family:  -apple-system, system-ui, sans-serif;
+  background-color: #1d2021;
+  color: #ddc7a1;
+  margin: 0 auto;
+  padding: 0
+}
+                          `, {
+        headers: {
+          "Content-Type": "text/css"
+        }
+      });
+
+    }
+
+    return new Response("Not found", {
+      status: 404
+    });
 
   }
 });

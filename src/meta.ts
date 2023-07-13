@@ -110,6 +110,10 @@ export const metas = [
     title: "aabccd021 blog",
     type: "application/json"
   }),
+  link({
+    href: "style.css",
+    rel: "stylesheet"
+  }),
   script({
     type: "application/json"
   }, [
