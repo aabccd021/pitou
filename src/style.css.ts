@@ -32,7 +32,6 @@ export const cssClass = (cssProperties: CSS.StandardPropertiesHyphen) => {
 
 };
 
-
 const textColor = "#ddc7a1";
 const textColorLink = "#7daea3";
 const textColorLinkActive = "#ea6962";
@@ -130,6 +129,14 @@ const classes = {
     top: "auto",
     left: "-10000px",
     overflow: "hidden"
+  },
+
+  postListItemImage: {
+    "object-fit": "contain",
+    width: "382px",
+    height: "200px",
+    margin: 0
+
   }
 
 } satisfies Record<string, CSS.StandardPropertiesHyphen>;

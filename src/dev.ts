@@ -102,7 +102,7 @@ const page = html({
             type: "image/webp"
           }),
           img({
-            class: style.img.name,
+            class: style.postListItemImage.name,
             src: "/img/BMWTtZw5Gk-1200.svg",
             alt: "command to create new GitHub repository",
             decoding: "async",
