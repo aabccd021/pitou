@@ -154,3 +154,11 @@ export const aActive = cls({
 export const aHover = cls({
   color: textColorLinkActive
 }, ":hover");
+
+export const skipFocus = cls({
+  width: "auto",
+  height: "auto",
+  position: "static"
+}, ":focus");
+
+

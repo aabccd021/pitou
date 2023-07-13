@@ -66,13 +66,18 @@ const blogHeader = header({
 
 ]);
 
+const clsx = (classes: string[]) => classes.join(" ");
+
 const page = html({
   lang: "en",
   class: style.html.name
 }, [
   ...metas,
   a({
-    class: "skip"
+    class: clsx([
+      style.skip.name,
+      style.skipFocus.name
+    ]),
   }, [
     "Skip to main content"
   ]),
@@ -111,13 +116,13 @@ const page = html({
         ]),
 
         a({
-          class: [
+          class: clsx([
             style.postlistLink.name, 
             style.a.name, 
             style.aVisited.name, 
             style.aActive.name, 
             style.aHover.name
-          ].join(' '),
+          ]),
           href: "/blog/create-new-github-repository-from-cli-with-gh-command/"
         }, [
           "Create new GitHub repository from CLI with gh command"
