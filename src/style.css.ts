@@ -212,11 +212,9 @@ export const skip = pcls({
     overflow: "hidden"
   },
   ":focus": {
-
     width: "auto",
     height: "auto",
     position: "static"
   }
-
 });
 
