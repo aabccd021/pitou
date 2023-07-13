@@ -8,7 +8,9 @@ interface CompiledCls {
   text: string;
 }
 
-const mkPropertiesStr = (properties: CSS.StandardPropertiesHyphen): string => {
+type Properties = CSS.StandardPropertiesHyphen;
+
+const mkPropertiesStr = (properties: Properties): string => {
 
   const propertiesStr = Object
     .entries(properties)
@@ -20,7 +22,7 @@ const mkPropertiesStr = (properties: CSS.StandardPropertiesHyphen): string => {
 
 };
 
-const cls = (properties: CSS.StandardPropertiesHyphen): CompiledCls => {
+const cls = (properties: Properties): CompiledCls => {
 
   const propertiesStr = mkPropertiesStr(properties);
 
@@ -37,7 +39,7 @@ const cls = (properties: CSS.StandardPropertiesHyphen): CompiledCls => {
 
 };
 
-const pcls = (selectorProperties: Partial<Record<CSS.Pseudos | "", CSS.StandardPropertiesHyphen>>): CompiledCls => {
+const pcls = (selectorProperties: Partial<Record<CSS.Pseudos | "", Properties>>): CompiledCls => {
 
   const selectorPropertiesStr = Object
     .entries(selectorProperties)
@@ -114,10 +116,6 @@ export const nav = cls({
   display: "flex"
 });
 
-export const navItem = cls({
-  display: "inline-block"
-});
-
 export const img = cls({
   "object-fit": "contain",
   width: "100%",
@@ -151,18 +149,11 @@ export const postListItemImage = cls({
   margin: 0
 });
 
-export const postlistLink = pcls({
+const a = (properties: Properties) => pcls({
   "": {
     color: textColorLink,
     "text-underline-offset": ".3em",
-    "margin-bottom": ".3em",
-    "text-decoration-color": lineColor,
-    "text-underline-position": "from-font",
-    "font-size": "1.1875em",
-    "font-weight": 700,
-    "line-height": 1.5,
-    "text-decoration-thickness": "1px",
-    display: "block"
+    ...properties
   },
   ":visited": {
     color: textColorLinkVisited
@@ -173,6 +164,23 @@ export const postlistLink = pcls({
   ":hover": {
     color: textColorLinkActive
   }
+});
+
+export const navItem = a({
+  display: "inline-block"
+});
+
+export const postlistLink = a({
+  color: textColorLink,
+  "text-underline-offset": ".3em",
+  "margin-bottom": ".3em",
+  "text-decoration-color": lineColor,
+  "text-underline-position": "from-font",
+  "font-size": "1.1875em",
+  "font-weight": 700,
+  "line-height": 1.5,
+  "text-decoration-thickness": "1px",
+  display: "block"
 });
 
 export const skip = pcls({
