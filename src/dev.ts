@@ -25,7 +25,7 @@ const blogHeader = header({
       width: "40rem"
     }),
     p({}, [
-      "aabccd021 blog"
+      "functionhero"
     ])
   ]),
 
@@ -69,8 +69,6 @@ const blogHeader = header({
   ])
 
 ]);
-
-const clsx = (classes: string[]) => classes.join(" ");
 
 const page = html({
   lang: "en",

@@ -2,6 +2,9 @@ import type * as CSS from "csstype";
 import {
   createHash
 } from "node:crypto";
+import {
+  stringify
+} from "safe-stable-stringify";
 
 interface CompiledCls {
   name: string;
@@ -9,6 +12,18 @@ interface CompiledCls {
 }
 
 type Properties = CSS.StandardPropertiesHyphen;
+
+const getClassName = (param: unknown): string => {
+
+  const str = stringify(param) ?? "";
+  const hash = createHash("md5")
+    .update(str)
+    .digest("hex");
+
+  // class name must start with a letter
+  return `gen-${hash}`;
+
+};
 
 const mkPropertiesStr = (properties: Properties): string => {
 
@@ -24,13 +39,9 @@ const mkPropertiesStr = (properties: Properties): string => {
 
 const cls = (properties: Properties): CompiledCls => {
 
+  const name = getClassName(properties);
   const propertiesStr = mkPropertiesStr(properties);
 
-  const hash = createHash("md5")
-    .update(propertiesStr)
-    .digest("hex");
-
-  const name = `gen-${hash}`;
 
   return {
     name,
@@ -39,39 +50,35 @@ const cls = (properties: Properties): CompiledCls => {
 
 };
 
-type PseudoCls = Partial<Record<CSS.Pseudos | (string & NonNullable<unknown>), Properties>>;
+interface SelectedClass {
+  media?: string;
+  selector?: CSS.Pseudos | (string & NonNullable<unknown>);
+  properties: Properties;
+}
 
-const isNotUndefined = <T>(z: T | undefined): z is T => z !== undefined;
+const pcls = (selectorProperties: SelectedClass[]): CompiledCls => {
 
-const pcls = (selectorProperties: PseudoCls): CompiledCls => {
+  const name = getClassName(selectorProperties);
 
-  const selectorPropertiesStr = Object
-    .entries(selectorProperties)
-    .map(([ selector, properties ]) => {
+  const text = selectorProperties
+    .map((spec) => {
 
-      if (properties === undefined) {
+      const propertiesStr = mkPropertiesStr(spec.properties);
+      const selectorStr = spec.selector ?? "";
+      const classDef = `.${name}${selectorStr} ${propertiesStr}`;
+      if (spec.media !== undefined) {
 
-        return undefined;
+        return `@media ${spec.media} {\n.${classDef}\n}`;
 
       }
-
-      const propertiesStr = mkPropertiesStr(properties);
-      return `${selector} ${propertiesStr}`;
+      return classDef;
 
     })
-    .filter(isNotUndefined);
-
-  const hash = createHash("md5")
-    .update(selectorPropertiesStr.join(""))
-    .digest("hex");
-
-  const name = `gen-${hash}`;
+    .join("\n");
 
   return {
     name,
-    text: selectorPropertiesStr
-      .map((propertiesStr) => `.${name}${propertiesStr}`)
-      .join("\n")
+    text
   };
 
 };
@@ -161,34 +168,39 @@ export const postListItemImage = cls({
   margin: 0
 });
 
-const a = (properties: Properties): PseudoCls => ({
-  "": {
-    color: textColorLink,
-    "text-underline-offset": ".3em",
-    ...properties
+const a = (properties: Properties): SelectedClass[] => [
+  {
+    properties: {
+      color: textColorLink,
+      "text-underline-offset": ".3em",
+      ...properties
+    }
   },
-  ":visited": {
-    color: textColorLinkVisited
+  {
+    selector: ":visited",
+    properties: {
+      color: textColorLinkVisited
+    }
   },
-  ":active": {
-    color: textColorLinkActive
+  {
+    selector: ":active",
+    properties: {
+      color: textColorLinkActive
+    }
   },
-  ":hover": {
-    color: textColorLinkActive
+  {
+    selector: ":hover",
+    properties: {
+      color: textColorLinkActive
+    }
   }
-});
+];
 
-export const navItem = pcls({
-  ...a({
+export const navItem = pcls(
+  a({
     display: "inline-block"
   })
-
-  /*
-   * ":not(:hover)": {
-   *   "text-decoration": "none"
-   * }
-   */
-});
+);
 
 export const postlistLink = pcls(a({
   color: textColorLink,
@@ -203,19 +215,24 @@ export const postlistLink = pcls(a({
   display: "block"
 }));
 
-export const skip = pcls({
-  "": {
-    width: "1px",
-    height: "1px",
-    position: "absolute",
-    top: "auto",
-    left: "-10000px",
-    overflow: "hidden"
+export const skip = pcls([
+  {
+    properties: {
+      width: "1px",
+      height: "1px",
+      position: "absolute",
+      top: "auto",
+      left: "-10000px",
+      overflow: "hidden"
+    }
   },
-  ":focus": {
-    width: "auto",
-    height: "auto",
-    position: "static"
+  {
+    selector: ":focus",
+    properties: {
+      width: "auto",
+      height: "auto",
+      position: "static"
+    }
   }
-});
+]);
 

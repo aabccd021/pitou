@@ -15,6 +15,7 @@
   "dependencies": {
     "csstype": "^3.1.2",
     "lodash": "^4.17.21",
+    "safe-stable-stringify": "^2.4.3",
     "web-tree-sitter": "^0.20.8"
   }
 }
