@@ -11,9 +11,7 @@ import {
 import {
   metas
 } from "./meta";
-import {
-  style
-} from "./style.css";
+import * as style from "./style.css";
 
 const blogHeader = header({
   class: style.header.name
@@ -135,15 +133,12 @@ const page = html({
 
 const htmlString = elementToString(page);
 
-const cssString = Object
-  .values(style)
-  .map((cssClass) => cssClass.text)
-  .join("\n");
+Object.values(style)
+  .map((z) => z);
 
-console.log(cssString);
 
 export default withHtmlLiveReload({
-  fetch: (request) => {
+  fetch: async (request) => {
 
     const path = new URL(request.url).pathname;
     if (path === "/") {
@@ -157,6 +152,12 @@ export default withHtmlLiveReload({
     }
 
     if (path === "/style.css") {
+
+      const styles = await import("./style.css.ts");
+
+      const cssString = Object.values(styles)
+        .map((z) => z.text)
+        .join("\n");
 
       return new Response(cssString, {
         headers: {

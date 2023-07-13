@@ -1125,7 +1125,8 @@ export const elementToString = <Tag extends Tags>(
     return openTag;
 
   }
-  const childrenStr = element.children.map(elementToString).join("");
+  const childrenStr = element.children.map(elementToString)
+    .join("");
   return `${openTag}${childrenStr}</${element.tag}>`;
 
 };
