@@ -4,6 +4,12 @@ import {
   elementToString, h1, html, img, li, main, nav, picture, source, time, ul, header, p
 } from "./html";
 
+import type * as CSS from "csstype";
+import {
+  createHash
+} from "node:crypto";
+
+
 import {
   withHtmlLiveReload
 } from "./hot";
@@ -60,8 +66,47 @@ const blogHeader = header({}, [
 
 ]);
 
+const style: CSS.StandardPropertiesHyphen = {
+  "max-width": "40em",
+  "font-family": "-apple-system, system-ui, sans-serif",
+  "background-color": "#1d2021",
+  color: "#ddc7a1",
+  margin: "0 auto",
+  padding: "0"
+};
+
+const cssClass = (cssProperties: CSS.StandardPropertiesHyphen) => {
+
+  const properties = Object
+    .entries(cssProperties)
+    .map(([
+      key,
+      value
+    ]) => `\n  ${key}: ${value};`)
+    .sort()
+    .join("");
+
+  const hash = createHash("md5")
+    .update(properties)
+    .digest("hex");
+
+  const name = `gen-${hash}`;
+
+  return {
+    name,
+    text: `.${name} {${properties}\n}`
+  };
+
+};
+
+const htmlCss = cssClass(style);
+
+console.log(htmlCss);
+
+
 const page = html({
-  lang: "en"
+  lang: "en",
+  class: htmlCss.name
 }, [
   ...metas,
   a({
@@ -124,7 +169,6 @@ const page = html({
 
 const htmlString = elementToString(page);
 
-
 export default withHtmlLiveReload({
   fetch: (request) => {
 
@@ -141,16 +185,7 @@ export default withHtmlLiveReload({
 
     if (path === "/style.css") {
 
-      return new Response(`
-html {
-  max-width: 40em;
-  font-family:  -apple-system, system-ui, sans-serif;
-  background-color: #1d2021;
-  color: #ddc7a1;
-  margin: 0 auto;
-  padding: 0
-}
-                          `, {
+      return new Response(htmlCss.text, {
         headers: {
           "Content-Type": "text/css"
         }

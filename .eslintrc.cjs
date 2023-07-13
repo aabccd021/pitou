@@ -36,6 +36,7 @@ module.exports = {
     'id-length': 'off',
     'no-magic-numbers': 'off',
     'no-console': 'off',
+    'dot-location': [ 'error', 'property' ],
     '@typescript-eslint/block-spacing': 'error',
     '@typescript-eslint/brace-style': 'error',
     '@typescript-eslint/comma-dangle': 'error',
