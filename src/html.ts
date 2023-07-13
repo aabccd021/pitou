@@ -334,7 +334,7 @@ type AriaRole =
   | "tree"
   | "treegrid"
   | "treeitem"
-  | (string & Record<string, never>);
+  | (string & NonNullable<unknown>);
 
 
 // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/23c436771a06e6bb72edc427c57cfd36b686468a/types/react/index.d.ts#L1920-L1938
@@ -407,7 +407,7 @@ type HTMLAttributeAnchorTarget =
     | "_blank"
     | "_parent"
     | "_top"
-    | (string & Record<string, never>);
+    | (string & NonNullable<unknown>);
 
 interface AnchorHTMLAttributes {
   // download: any;
@@ -583,7 +583,7 @@ type HTMLInputTypeAttribute =
     | "time"
     | "url"
     | "week"
-    | (string & Record<string, never>);
+    | (string & NonNullable<unknown>);
 
 interface InputHTMLAttributes {
   accept: string;

@@ -39,16 +39,27 @@ const cls = (properties: Properties): CompiledCls => {
 
 };
 
-const pcls = (selectorProperties: Partial<Record<CSS.Pseudos | "", Properties>>): CompiledCls => {
+type PseudoCls = Partial<Record<CSS.Pseudos | (string & NonNullable<unknown>), Properties>>;
+
+const isNotUndefined = <T>(z: T | undefined): z is T => z !== undefined;
+
+const pcls = (selectorProperties: PseudoCls): CompiledCls => {
 
   const selectorPropertiesStr = Object
     .entries(selectorProperties)
     .map(([ selector, properties ]) => {
 
+      if (properties === undefined) {
+
+        return undefined;
+
+      }
+
       const propertiesStr = mkPropertiesStr(properties);
       return `${selector} ${propertiesStr}`;
 
-    });
+    })
+    .filter(isNotUndefined);
 
   const hash = createHash("md5")
     .update(selectorPropertiesStr.join(""))
@@ -149,7 +160,7 @@ export const postListItemImage = cls({
   margin: 0
 });
 
-const a = (properties: Properties) => pcls({
+const a = (properties: Properties): PseudoCls => ({
   "": {
     color: textColorLink,
     "text-underline-offset": ".3em",
@@ -166,11 +177,19 @@ const a = (properties: Properties) => pcls({
   }
 });
 
-export const navItem = a({
-  display: "inline-block"
+export const navItem = pcls({
+  ...a({
+    display: "inline-block"
+  })
+
+  /*
+   * ":not(:hover)": {
+   *   "text-decoration": "none"
+   * }
+   */
 });
 
-export const postlistLink = a({
+export const postlistLink = pcls(a({
   color: textColorLink,
   "text-underline-offset": ".3em",
   "margin-bottom": ".3em",
@@ -181,7 +200,7 @@ export const postlistLink = a({
   "line-height": 1.5,
   "text-decoration-thickness": "1px",
   display: "block"
-});
+}));
 
 export const skip = pcls({
   "": {
@@ -198,5 +217,6 @@ export const skip = pcls({
     height: "auto",
     position: "static"
   }
+
 });
 
