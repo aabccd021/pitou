@@ -6,15 +6,20 @@ import {
   createHash
 } from "node:crypto";
 
-export interface CssClass {
+export interface compiledClass {
   name: string;
   text: string;
 }
 
-export const cssClass = (cssProperties: CSS.StandardPropertiesHyphen) => {
+export interface ClassSpec {
+  properties: CSS.StandardPropertiesHyphen;
+  selector?: CSS.Pseudos
+}
+
+export const compileClass = (spec: ClassSpec) => {
 
   const properties = Object
-    .entries(cssProperties)
+    .entries(spec.properties)
     .map(([ key, value ]) => `\n  ${key}: ${value};`)
     .sort()
     .join("");
@@ -24,10 +29,11 @@ export const cssClass = (cssProperties: CSS.StandardPropertiesHyphen) => {
     .digest("hex");
 
   const name = `gen-${hash}`;
+  const selector = spec.selector ?? "";
 
   return {
     name,
-    text: `.${name} {${properties}\n}`
+    text: `.${name}${selector} {${properties}\n}`
   };
 
 };
@@ -41,104 +47,129 @@ const backgroundColor = "#1d2021";
 const classes = {
 
   html: {
-    "max-width": "40em",
-    "font-family": "-apple-system, system-ui, sans-serif",
-    "background-color": backgroundColor,
-    color: textColor,
-    margin: "0 auto",
-    padding: "0"
+    properties: {
+      "max-width": "40em",
+      "font-family": "-apple-system, system-ui, sans-serif",
+      "background-color": backgroundColor,
+      color: textColor,
+      margin: "0 auto",
+      padding: "0"
+    }
   },
 
   header: {
-    "border-bottom": "1px dashed",
-    "flex-wrap": "wrap",
-    "justify-content": "center",
-    "align-items": "center",
-    gap: "0 5em",
-    margin: 0,
-    padding: ".5em",
-    display: "flex"
+    properties: {
+      "border-bottom": "1px dashed",
+      "flex-wrap": "wrap",
+      "justify-content": "center",
+      "align-items": "center",
+      gap: "0 5em",
+      margin: 0,
+      padding: ".5em",
+      display: "flex"
+    }
   },
 
   main: {
-    padding: "1rem 0"
+    properties: {
+      padding: "1rem 0"
+    }
   },
 
   title: {
-    "flex-wrap": "wrap",
-    "align-items": "center",
-    gap: "1em .8em",
-    margin: 0,
-    padding: 0,
-    "font-size": "1.3em",
-    "font-weight": 900,
-    "line-height": 1,
-    display: "flex"
+    properties: {
+      "flex-wrap": "wrap",
+      "align-items": "center",
+      gap: "1em .8em",
+      margin: 0,
+      padding: 0,
+      "font-size": "1.3em",
+      "font-weight": 900,
+      "line-height": 1,
+      display: "flex"
+    }
   },
 
   nav: {
-    gap: "1em",
-    margin: 0,
-    padding: "1em 0",
-    display: "flex"
+    properties: {
+      gap: "1em",
+      margin: 0,
+      padding: "1em 0",
+      display: "flex"
+    }
   },
 
   navItem: {
-    display: "inline-block"
+    properties: {
+      display: "inline-block"
+    }
   },
 
   img: {
-    "object-fit": "contain",
-    width: "100%",
-    height: "auto",
-    border: "1px solid #7c6f64",
-    margin: "1em 0",
-    display: "block"
+    properties: {
+      "object-fit": "contain",
+      width: "100%",
+      height: "auto",
+      border: "1px solid #7c6f64",
+      margin: "1em 0",
+      display: "block"
+    }
   },
 
   postlist: {
-    padding: 0,
-    "list-style": "none"
+    properties: {
+      padding: 0,
+      "list-style": "none"
+    }
   },
 
   postlistItem: {
-    "margin-bottom": "4em"
+    properties: {
+      "margin-bottom": "4em"
+    }
   },
 
   postlistDate: {
-    color: textColor,
-    "word-spacing": "-.5px",
-    "font-size": ".8125em",
-    display: "block"
+    properties: {
+      color: textColor,
+      "word-spacing": "-.5px",
+      "font-size": ".8125em",
+      display: "block"
+    }
   },
 
   postlistLink: {
-    "text-underline-position": "from-font",
-    "text-underline-offset": 0,
-    "font-size": "1.1875em",
-    "font-weight": 700,
-    "line-height": 1.5,
-    "text-decoration-thickness": "1px",
-    display: "block"
+    properties: {
+      "text-underline-position": "from-font",
+      "text-underline-offset": 0,
+      "font-size": "1.1875em",
+      "font-weight": 700,
+      "line-height": 1.5,
+      "text-decoration-thickness": "1px",
+      display: "block"
+    }
   },
 
   skip: {
-    width: "1px",
-    height: "1px",
-    position: "absolute",
-    top: "auto",
-    left: "-10000px",
-    overflow: "hidden"
+    properties: {
+      width: "1px",
+      height: "1px",
+      position: "absolute",
+      top: "auto",
+      left: "-10000px",
+      overflow: "hidden"
+    }
   },
 
   postListItemImage: {
-    "object-fit": "contain",
-    width: "382px",
-    height: "200px",
-    margin: 0
-
+    properties: {
+      "object-fit": "contain",
+      width: "382px",
+      height: "200px",
+      margin: 0
+    }
   }
 
-} satisfies Record<string, CSS.StandardPropertiesHyphen>;
+} satisfies Record<string, ClassSpec>;
 
-export const style = mapValues(classes, (a) => cssClass(a));
+export const style = mapValues(classes, (a) => compileClass(a));
