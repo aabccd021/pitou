@@ -3,12 +3,12 @@ import {
   createHash
 } from "node:crypto";
 
-interface compiledCls {
+interface CompiledCls {
   name: string;
   text: string;
 }
 
-const cls = (properties: CSS.StandardPropertiesHyphen, selector?: CSS.Pseudos): compiledCls => {
+const mkPropertiesStr = (properties: CSS.StandardPropertiesHyphen): string => {
 
   const propertiesStr = Object
     .entries(properties)
@@ -16,16 +16,49 @@ const cls = (properties: CSS.StandardPropertiesHyphen, selector?: CSS.Pseudos): 
     .sort()
     .join("");
 
+  return `{${propertiesStr}\n}`;
+
+};
+
+const cls = (properties: CSS.StandardPropertiesHyphen): CompiledCls => {
+
+  const propertiesStr = mkPropertiesStr(properties);
+
   const hash = createHash("md5")
     .update(propertiesStr)
     .digest("hex");
 
   const name = `gen-${hash}`;
-  const selectorStr = selector ?? "";
 
   return {
     name,
-    text: `.${name}${selectorStr} {${propertiesStr}\n}`
+    text: `.${name} ${propertiesStr}`
+  };
+
+};
+
+const pcls = (selectorProperties: Partial<Record<CSS.Pseudos | "", CSS.StandardPropertiesHyphen>>): CompiledCls => {
+
+  const selectorPropertiesStr = Object
+    .entries(selectorProperties)
+    .map(([ selector, properties ]) => {
+
+      const propertiesStr = mkPropertiesStr(properties);
+      return `${selector} ${propertiesStr}`;
+
+    });
+
+  const hash = createHash("md5")
+    .update(selectorPropertiesStr.join(""))
+    .digest("hex");
+
+  const name = `gen-${hash}`;
+
+  return {
+    name,
+    text: selectorPropertiesStr
+      .map((propertiesStr) => `.${name}${propertiesStr}`)
+      .join("\n")
   };
 
 };
@@ -110,24 +143,6 @@ export const postlistDate = cls({
   display: "block"
 });
 
-export const postlistLink = cls({
-  "text-underline-position": "from-font",
-  "text-underline-offset": 0,
-  "font-size": "1.1875em",
-  "font-weight": 700,
-  "line-height": 1.5,
-  "text-decoration-thickness": "1px",
-  display: "block"
-});
-
-export const skip = cls({
-  width: "1px",
-  height: "1px",
-  position: "absolute",
-  top: "auto",
-  left: "-10000px",
-  overflow: "hidden"
-});
 
 export const postListItemImage = cls({
   "object-fit": "contain",
@@ -136,29 +151,44 @@ export const postListItemImage = cls({
   margin: 0
 });
 
-export const a = cls({
-  color: textColorLink,
-  "text-underline-offset": ".3em",
-  "margin-bottom": ".3em",
-  "text-decoration-color": lineColor
+export const postlistLink = pcls({
+  "": {
+    color: textColorLink,
+    "text-underline-offset": ".3em",
+    "margin-bottom": ".3em",
+    "text-decoration-color": lineColor,
+    "text-underline-position": "from-font",
+    "font-size": "1.1875em",
+    "font-weight": 700,
+    "line-height": 1.5,
+    "text-decoration-thickness": "1px",
+    display: "block"
+  },
+  ":visited": {
+    color: textColorLinkVisited
+  },
+  ":active": {
+    color: textColorLinkActive
+  },
+  ":hover": {
+    color: textColorLinkActive
+  }
 });
 
-export const aVisited = cls({
-  color: textColorLinkVisited
-}, ":visited");
+export const skip = pcls({
+  "": {
+    width: "1px",
+    height: "1px",
+    position: "absolute",
+    top: "auto",
+    left: "-10000px",
+    overflow: "hidden"
+  },
+  ":focus": {
 
-export const aActive = cls({
-  color: textColorLinkActive
-}, ":active");
-
-export const aHover = cls({
-  color: textColorLinkActive
-}, ":hover");
-
-export const skipFocus = cls({
-  width: "auto",
-  height: "auto",
-  position: "static"
-}, ":focus");
-
+    width: "auto",
+    height: "auto",
+    position: "static"
+  }
+});
 
