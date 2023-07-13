@@ -62,15 +62,6 @@
     }
   }
 
-  html {
-    max-width: 40em;
-    font-family: var(--font-family);
-    background-color: var(--background-color);
-    color: var(--text-color);
-    margin: 0 auto;
-    padding: 0
-  }
-
   p,
   li {
     line-height: 1.5
@@ -97,49 +88,8 @@
     color: var(--text-color-link-active)
   }
 
-  main {
-    padding: 1rem 0
-  }
-
   main :first-child {
     margin-top: 0
-  }
-
-  header {
-    border-bottom: 1px dashed
-  }
-
-  header {
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 0 5em;
-    margin: 0;
-    padding: .5em;
-    display: flex
-  }
-
-  .title {
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1em .8em;
-    margin: 0;
-    padding: 0;
-    font-size: 1.3em;
-    font-weight: 900;
-    line-height: 1;
-    display: flex
-  }
-
-  nav {
-    gap: 1em;
-    margin: 0;
-    padding: 1em 0;
-    display: flex
-  }
-
-  .nav-item {
-    display: inline-block
   }
 
   .nav-item a[href]:not(:hover) {
@@ -150,28 +100,10 @@
     text-decoration: underline
   }
 
-  .skip {
-    width: 1px;
-    height: 1px;
-    position: absolute;
-    top: auto;
-    left: -10000px;
-    overflow: hidden
-  }
-
   .skip:focus {
     width: auto;
     height: auto;
     position: static
-  }
-
-  img {
-    object-fit: contain;
-    width: 100%;
-    height: auto;
-    border: 1px solid #7c6f64;
-    margin: 1em 0;
-    display: block
   }
 
   .header-anchor {
@@ -196,31 +128,6 @@
     color: #aaa
   }
 
-  .postlist {
-    padding: 0;
-    list-style: none
-  }
-
-  .postlist-item {
-    margin-bottom: 4em
-  }
-
-  .postlist-date {
-    color: var(--text-color);
-    word-spacing: -.5px;
-    font-size: .8125em;
-    display: block
-  }
-
-  .postlist-link {
-    text-underline-position: from-font;
-    text-underline-offset: 0;
-    font-size: 1.1875em;
-    font-weight: 700;
-    line-height: 1.5;
-    text-decoration-thickness: 1px;
-    display: block
-  }
 
   .postlist-item>picture>img {
     object-fit: contain;

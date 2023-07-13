@@ -4,11 +4,6 @@ import {
   elementToString, h1, html, img, li, main, nav, picture, source, time, ul, header, p
 } from "./html";
 
-import type * as CSS from "csstype";
-import {
-  createHash
-} from "node:crypto";
-
 
 import {
   withHtmlLiveReload
@@ -16,21 +11,28 @@ import {
 import {
   metas
 } from "./meta";
+import {
+  style
+} from "./style.css";
 
-const blogHeader = header({}, [
+const blogHeader = header({
+  class: style.header.name
+}, [
 
   div({
-    class: "title"
+    class: style.title.name
   }, [
     p({}, [
       "aabccd021 blog"
     ])
   ]),
 
-  nav({}, [
+  nav({
+    class: style.nav.name
+  }, [
 
     a({
-      class: "nav-item",
+      class: style.navItem.name,
       href: "/",
       "aria-current": "page"
     }, [
@@ -39,14 +41,14 @@ const blogHeader = header({}, [
 
 
     a({
-      class: "nav-item",
+      class: style.navItem.name,
       href: "/tags/"
     }, [
       "Tags"
     ]),
 
     a({
-      class: "nav-item",
+      class: style.navItem.name,
       href: "/about/"
     }, [
       "About Me"
@@ -54,7 +56,7 @@ const blogHeader = header({}, [
 
 
     a({
-      class: "nav-item",
+      class: style.navItem.name,
       href: "/feed/feed.xml",
       rel: "alternate",
       type: "application/rss+xml"
@@ -66,44 +68,9 @@ const blogHeader = header({}, [
 
 ]);
 
-const style: CSS.StandardPropertiesHyphen = {
-  "max-width": "40em",
-  "font-family": "-apple-system, system-ui, sans-serif",
-  "background-color": "#1d2021",
-  color: "#ddc7a1",
-  margin: "0 auto",
-  padding: "0"
-};
-
-const cssClass = (cssProperties: CSS.StandardPropertiesHyphen) => {
-
-  const properties = Object
-    .entries(cssProperties)
-    .map(([ key, value ]) => `\n  ${key}: ${value};`)
-    .sort()
-    .join("");
-
-  const hash = createHash("md5")
-    .update(properties)
-    .digest("hex");
-
-  const name = `gen-${hash}`;
-
-  return {
-    name,
-    text: `.${name} {${properties}\n}`
-  };
-
-};
-
-const htmlCss = cssClass(style);
-
-console.log(htmlCss);
-
-
 const page = html({
   lang: "en",
-  class: htmlCss.name
+  class: style.html.name
 }, [
   ...metas,
   a({
@@ -113,16 +80,17 @@ const page = html({
   ]),
   blogHeader,
   main({
-    id: "main"
+    id: "main",
+    class: style.main.name
   }, [
     h1({}, [
       "Posts"
     ]),
     ul({
-      class: "postlist reversed"
+      class: style.postlist.name
     }, [
       li({
-        class: "postlist-item"
+        class: style.postlistItem.name
       }, [
         picture({}, [
           source({
@@ -134,6 +102,7 @@ const page = html({
             type: "image/webp"
           }),
           img({
+            class: style.img.name,
             src: "/img/BMWTtZw5Gk-1200.svg",
             alt: "command to create new GitHub repository",
             decoding: "async",
@@ -144,14 +113,14 @@ const page = html({
         ]),
 
         a({
-          class: "postlist-link",
+          class: style.postlistLink.name,
           href: "/blog/create-new-github-repository-from-cli-with-gh-command/"
         }, [
           "Create new GitHub repository from CLI with gh command"
         ]),
 
         time({
-          class: "postlist-date",
+          class: style.postlistDate.name,
           datetime: "2023-02-05"
         }, [
           "5 February 2023"
@@ -165,6 +134,13 @@ const page = html({
 ]);
 
 const htmlString = elementToString(page);
+
+const cssString = Object
+  .values(style)
+  .map((cssClass) => cssClass.text)
+  .join("\n");
+
+console.log(cssString);
 
 export default withHtmlLiveReload({
   fetch: (request) => {
@@ -182,7 +158,7 @@ export default withHtmlLiveReload({
 
     if (path === "/style.css") {
 
-      return new Response(htmlCss.text, {
+      return new Response(cssString, {
         headers: {
           "Content-Type": "text/css"
         }
