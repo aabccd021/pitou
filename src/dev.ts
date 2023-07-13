@@ -79,10 +79,7 @@ const cssClass = (cssProperties: CSS.StandardPropertiesHyphen) => {
 
   const properties = Object
     .entries(cssProperties)
-    .map(([
-      key,
-      value
-    ]) => `\n  ${key}: ${value};`)
+    .map(([ key, value ]) => `\n  ${key}: ${value};`)
     .sort()
     .join("");
 

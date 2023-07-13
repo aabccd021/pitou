@@ -1113,12 +1113,12 @@ export const elementToString = <Tag extends Tags>(
     return element;
 
   }
-  const attributes = Object.entries(element.attributes).
-      map(([
+  const attributes = Object.entries(element.attributes)
+      .map(([
         key,
         value
-      ]) => ` ${key}="${value}"`).
-      join(""),
+      ]) => ` ${key}="${value}"`)
+      .join(""),
     openTag = `<${element.tag}${attributes}>`;
   if (element.children === undefined) {
 
