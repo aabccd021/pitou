@@ -39,7 +39,7 @@
             nix build --offline && bun run result/dist/index.js
           '')
           (writeShellScriptBin "dev" ''
-            cd 
+            cd ${projectRoot}
             bun --hot ${projectRoot}/src/dev.ts "$@"
           '')
           (writeShellScriptBin "lint" ''
