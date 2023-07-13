@@ -142,6 +142,7 @@ export const postlist = cls({
 });
 
 export const postlistItem = cls({
+  "line-height": 1.5,
   "margin-bottom": "4em"
 });
 
@@ -197,7 +198,7 @@ export const postlistLink = pcls(a({
   "text-underline-position": "from-font",
   "font-size": "1.1875em",
   "font-weight": 700,
-  "line-height": 1.5,
+  "line-height": 2,
   "text-decoration-thickness": "1px",
   display: "block"
 }));

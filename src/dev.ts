@@ -20,6 +20,10 @@ const blogHeader = header({
   div({
     class: style.title.name
   }, [
+    img({
+      src: "/logo.svg",
+      width: "40rem"
+    }),
     p({}, [
       "aabccd021 blog"
     ])
@@ -143,6 +147,9 @@ export default withHtmlLiveReload({
   fetch: async (request) => {
 
     const path = new URL(request.url).pathname;
+
+    console.log(path);
+
     if (path === "/") {
 
       return new Response(`<!DOCTYPE html>${htmlString}`, {
@@ -166,6 +173,16 @@ export default withHtmlLiveReload({
           "Content-Type": "text/css"
         }
       });
+
+    }
+
+    const localFile = Bun.file(import.meta.dir + path);
+
+    console.log(localFile);
+
+    if (localFile.size > 0) {
+
+      return new Response(localFile.stream());
 
     }
 
