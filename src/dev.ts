@@ -111,7 +111,13 @@ const page = html({
         ]),
 
         a({
-          class: style.postlistLink.name,
+          class: [
+            style.postlistLink.name, 
+            style.a.name, 
+            style.aVisited.name, 
+            style.aActive.name, 
+            style.aHover.name
+          ].join(' '),
           href: "/blog/create-new-github-repository-from-cli-with-gh-command/"
         }, [
           "Create new GitHub repository from CLI with gh command"

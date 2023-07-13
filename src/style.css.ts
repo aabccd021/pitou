@@ -28,7 +28,6 @@ const cls = (properties: CSS.StandardPropertiesHyphen, selector?: CSS.Pseudos): 
     text: `.${name}${selectorStr} {${propertiesStr}\n}`
   };
 
-
 };
 
 
@@ -37,6 +36,7 @@ const textColorLink = "#7daea3";
 const textColorLinkActive = "#ea6962";
 const textColorLinkVisited = "#d3869b";
 const backgroundColor = "#1d2021";
+const lineColor = "#7c6f64";
 
 export const html = cls({
   "max-width": "40em",
@@ -89,7 +89,7 @@ export const img = cls({
   "object-fit": "contain",
   width: "100%",
   height: "auto",
-  border: "1px solid #7c6f64",
+  border: `1px solid ${lineColor}`,
   margin: "1em 0",
   display: "block"
 });
@@ -136,4 +136,21 @@ export const postListItemImage = cls({
   margin: 0
 });
 
+export const a = cls({
+  color: textColorLink,
+  "text-underline-offset": ".3em",
+  "margin-bottom": ".3em",
+  "text-decoration-color": lineColor
+});
 
+export const aVisited = cls({
+  color: textColorLinkVisited
+}, ":visited");
+
+export const aActive = cls({
+  color: textColorLinkActive
+}, ":active");
+
+export const aHover = cls({
+  color: textColorLinkActive
+}, ":hover");
