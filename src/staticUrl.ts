@@ -13,18 +13,11 @@ export const makeStaticUrl = (staticFilesDef: Record<string, string>) => (reques
 
   }
 
-  if (files.includes(`${requestedUrl}.html`)) {
-
-    return requestedUrl;
-
-  }
-
   if (files.includes(`${requestedUrl}index.html`)) {
 
     return requestedUrl;
 
   }
-
 
   throw new Error(`Unknown static file: ${requestedUrl}`);
 
