@@ -106,7 +106,7 @@ export const header = cls({
   "justify-content": "center",
   "align-items": "center",
   gap: "0 5em",
-  margin: 0,
+  margin: ".5em",
   padding: ".5em",
   display: "flex"
 });

@@ -2,7 +2,7 @@ import {
   link, meta, script, title
 } from "./html";
 import {
-  staticFiles, staticUrl
+  staticUrl
 } from "./staticUrl";
 
 export const metas = [
