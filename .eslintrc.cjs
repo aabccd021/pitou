@@ -40,6 +40,7 @@ module.exports = {
     'no-console': 'off',
     'dot-location': [ 'error', 'property' ],
     'newline-per-chained-call': [ 'error', { 'ignoreChainWithDepth': 1 } ],
+    'no-underscore-dangle': 'off',
     '@typescript-eslint/block-spacing': 'error',
     '@typescript-eslint/brace-style': 'error',
     '@typescript-eslint/comma-dangle': 'error',

@@ -453,7 +453,7 @@ interface ButtonHTMLAttributes {
   formTarget: string;
   name: string;
   type: "submit" | "reset" | "button";
-  value: string | readonly string[] | number;
+  value: string | number;
 }
 
 interface CanvasHTMLAttributes {
@@ -471,7 +471,7 @@ interface ColgroupHTMLAttributes {
 }
 
 interface DataHTMLAttributes {
-  value: string | readonly string[] | number;
+  value: string | number;
 }
 
 interface DetailsHTMLAttributes {
@@ -615,7 +615,7 @@ interface InputHTMLAttributes {
   src: string;
   step: number | string;
   type: HTMLInputTypeAttribute;
-  value: string | readonly string[] | number;
+  value: string | number;
   width: number | string;
 }
 
@@ -634,7 +634,7 @@ interface LabelHTMLAttributes {
 }
 
 interface LiHTMLAttributes {
-  value: string | readonly string[] | number;
+  value: string | number;
 }
 
 interface LinkHTMLAttributes {
@@ -688,7 +688,7 @@ interface MeterHTMLAttributes {
   max: number | string;
   min: number | string;
   optimum: number;
-  value: string | readonly string[] | number;
+  value: string | number;
 }
 
 interface QuoteHTMLAttributes {
@@ -722,7 +722,7 @@ interface OptionHTMLAttributes {
   disabled: boolean;
   label: string;
   selected: boolean;
-  value: string | readonly string[] | number;
+  value: string | number;
 }
 
 interface OutputHTMLAttributes {
@@ -733,12 +733,12 @@ interface OutputHTMLAttributes {
 
 interface ParamHTMLAttributes {
   name: string;
-  value: string | readonly string[] | number;
+  value: string | number;
 }
 
 interface ProgressHTMLAttributes {
   max: number | string;
-  value: string | readonly string[] | number;
+  value: string | number;
 }
 
 interface SlotHTMLAttributes {
@@ -765,7 +765,7 @@ interface SelectHTMLAttributes {
   name: string;
   required: boolean;
   size: number;
-  value: string | readonly string[] | number;
+  value: string | number;
 }
 
 interface SourceHTMLAttributes {
@@ -809,7 +809,7 @@ interface TextareaHTMLAttributes {
   readOnly: boolean;
   required: boolean;
   rows: number;
-  value: string | readonly string[] | number;
+  value: string | number;
   wrap: string;
 }
 
@@ -998,135 +998,174 @@ interface Attributes {
 
 type Tags = keyof Attributes;
 
-type VoidTags =
-  "area" |
-  "base" |
-  "br" |
-  "col" |
-  "embed" |
-  "hr" |
-  "img" |
-  "input" |
-  "link" |
-  "meta" |
-  "source" |
-  "track" |
-  "wbr";
+type AttributesOf<Tag extends Tags> = Partial<Attributes[Tag] & HTMLAttributes & AriaAttributes>;
 
-type NonVoidTags = Exclude<Tags, VoidTags>;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-use-before-define
+type Child = (Element<Tags> | string);
 
 interface Element<Tag extends Tags> {
   tag: Tag,
-  attributes: Partial<Attributes[Tag] & HTMLAttributes & AriaAttributes>,
-  children?: (Element<Tags> | string)[],
+  attributes: AttributesOf<Tag>,
+  children?: Child[],
 }
 
-export function h <Tag extends VoidTags> (
-  tag: Tag,
-  attributes: Partial<Attributes[Tag] & HTMLAttributes & AriaAttributes>,
-): Element<Tag>;
-
-export function h <Tag extends NonVoidTags> (
-  tag: Tag,
-  attributes: Partial<Attributes[Tag] & HTMLAttributes & AriaAttributes>,
-// eslint-disable-next-line @typescript-eslint/unified-signatures
-  children: (Element<Tags> | string)[]
-): Element<Tag>;
-
-// eslint-disable-next-line func-style, id-length
-export function h <Tag extends Tags> (
-  tag: Tag,
-  attributes: Partial<Attributes[Tag] & HTMLAttributes & AriaAttributes>,
-  children?: (Element<Tags> | string)[]
-): Element<Tag> {
-
-  return {
-    tag,
-    attributes,
-    children
-  };
-
-}
-
-export const hVoid = <Tag extends VoidTags>(tag: Tag) => (
-  attributes: Partial<Attributes[Tag] & HTMLAttributes & AriaAttributes>
+export const voidElement = <Tag extends Tags>(tag: Tag) => (
+  attributes: AttributesOf<Tag>
 ): Element<Tag> => ({
   tag,
   attributes
 });
 
-export const hNonVoid = <Tag extends NonVoidTags>(tag: Tag) => (
-  attributes: Partial<Attributes[Tag] & HTMLAttributes & AriaAttributes>,
-  children: (Element<Tags> | string)[]
+export const element = <Tag extends Tags>(tag: Tag) => (
+  attributes: AttributesOf<Tag>,
+  children?: Child[]
 ): Element<Tag> => ({
   tag,
   attributes,
   children
 });
 
-export const picture = hNonVoid("picture");
+export const a = element("a");
+export const address = element("address");
+export const area = voidElement("area");
+export const article = element("article");
+export const aside = element("aside");
+export const audio = element("audio");
+export const b = element("b");
+export const base = voidElement("base");
+export const bdi = element("bdi");
+export const bdo = element("bdo");
+export const big = element("big");
+export const blockquote = element("blockquote");
+export const body = element("body");
+export const br = voidElement("br");
+export const button = element("button");
+export const canvas = element("canvas");
+export const caption = element("caption");
+export const center = element("center");
+export const cite = element("cite");
+export const code = element("code");
+export const col = voidElement("col");
+export const colgroup = element("colgroup");
+export const data = element("data");
+export const datalist = element("datalist");
+export const dd = element("dd");
+export const del = element("del");
+export const details = element("details");
+export const dfn = element("dfn");
+export const dialog = element("dialog");
+export const div = element("div");
+export const dl = element("dl");
+export const dt = element("dt");
+export const em = element("em");
+export const embed = voidElement("embed");
+export const fieldset = element("fieldset");
+export const figcaption = element("figcaption");
+export const figure = element("figure");
+export const footer = element("footer");
+export const form = element("form");
+export const h1 = element("h1");
+export const h2 = element("h2");
+export const h3 = element("h3");
+export const h4 = element("h4");
+export const h5 = element("h5");
+export const h6 = element("h6");
+export const head = element("head");
+export const header = element("header");
+export const hgroup = element("hgroup");
+export const hr = voidElement("hr");
+export const html = element("html");
+export const i = element("i");
+export const iframe = element("iframe");
+export const img = voidElement("img");
+export const input = voidElement("input");
+export const ins = element("ins");
+export const kbd = element("kbd");
+export const keygen = element("keygen");
+export const label = element("label");
+export const legend = element("legend");
+export const li = element("li");
+export const link = voidElement("link");
+export const main = element("main");
+export const map = element("map");
+export const mark = element("mark");
+export const menu = element("menu");
+export const menuitem = element("menuitem");
+export const meta = voidElement("meta");
+export const meter = element("meter");
+export const nav = element("nav");
+export const noscript = element("noscript");
+export const object = element("object");
+export const ol = element("ol");
+export const optgroup = element("optgroup");
+export const option = element("option");
+export const output = element("output");
+export const p = element("p");
+export const param = element("param");
+export const picture = element("picture");
+export const pre = element("pre");
+export const progress = element("progress");
+export const q = element("q");
+export const rp = element("rp");
+export const rt = element("rt");
+export const ruby = element("ruby");
+export const s = element("s");
+export const samp = element("samp");
+export const search = element("search");
+export const slot = element("slot");
+export const script = element("script");
+export const section = element("section");
+export const select = element("select");
+export const small = element("small");
+export const source = voidElement("source");
+export const span = element("span");
+export const strong = element("strong");
+export const style = element("style");
+export const sub = element("sub");
+export const summary = element("summary");
+export const sup = element("sup");
+export const table = element("table");
+export const template = element("template");
+export const tbody = element("tbody");
+export const td = element("td");
+export const textarea = element("textarea");
+export const tfoot = element("tfoot");
+export const th = element("th");
+export const thead = element("thead");
+export const time = element("time");
+export const title = element("title");
+export const tr = element("tr");
+export const track = voidElement("track");
+export const u = element("u");
+export const ul = element("ul");
+export const var_ = element("var");
+export const video = element("video");
+export const wbr = voidElement("wbr");
+export const webview = element("webview");
 
-export const source = hVoid("source");
-
-export const img = hVoid("img");
-
-export const div = hNonVoid("div");
-
-export const header = hNonVoid("header");
-
-export const nav = hNonVoid("nav");
-
-export const a = hNonVoid("a");
-
-export const html = hNonVoid("html");
-
-export const time = hNonVoid("time");
-
-export const h1 = hNonVoid("h1");
-
-export const ul = hNonVoid("ul");
-
-export const li = hNonVoid("li");
-
-export const main = hNonVoid("main");
-
-export const p = hNonVoid("p");
-
-export const meta = hVoid("meta");
-
-export const link = hVoid("link");
-
-export const title = hNonVoid("title");
-
-export const body = hNonVoid("body");
-
-export const head = hNonVoid("head");
-
-export const script = hNonVoid("script");
-
-export const elementToString = <Tag extends Tags>(
-  element: Element<Tag> | string
+export const elementToString = (
+  el: Child
 ): string => {
 
-  if (typeof element === "string") {
+  if (typeof el === "string") {
 
-    return element;
+    return el;
 
   }
-  const attributes = Object.entries(element.attributes)
+  const attributes = Object.entries(el.attributes)
       .map(([
         key,
         value
       ]) => ` ${key}="${value}"`)
       .join(""),
-    openTag = `<${element.tag}${attributes}>`;
-  if (element.children === undefined) {
+    openTag = `<${el.tag}${attributes}>`;
+  if (el.children === undefined) {
 
     return openTag;
 
   }
-  const childrenStr = element.children.map(elementToString)
+  const childrenStr = el.children.map(elementToString)
     .join("");
-  return `${openTag}${childrenStr}</${element.tag}>`;
+  return `${openTag}${childrenStr}</${el.tag}>`;
 
 };
