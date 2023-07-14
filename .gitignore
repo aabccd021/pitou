@@ -4,3 +4,4 @@ result
 dist
 .temp
 tree-sitter-wasm
+public
