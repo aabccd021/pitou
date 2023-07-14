@@ -1,6 +1,6 @@
 import {
   htmlString
-} from "./blog";
+} from "./blog/index.html.ts";
 
 const files: Record<string, () => Promise<string>> = {
   "/index.html": () => Promise.resolve(htmlString),

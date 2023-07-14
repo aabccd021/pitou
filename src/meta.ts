@@ -1,6 +1,9 @@
 import {
   link, meta, script, title
 } from "./html";
+import {
+  staticFiles, staticUrl
+} from "./staticUrl";
 
 export const metas = [
   link({
@@ -111,7 +114,7 @@ export const metas = [
     type: "application/json"
   }),
   link({
-    href: "style.css",
+    href: staticUrl("/style.css"),
     rel: "stylesheet"
   }),
   script({
