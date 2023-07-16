@@ -52,7 +52,7 @@
           ${setupNodeModules}
           export PATH=node_modules/.bin:$PATH
 
-          echo ${tree-sitter-grammars.tree-sitter-json}
+          echo ${tree-sitter.grammars}
 
           rm -rf ${projectRoot}/tree-sitter-wasm
           mkdir ${projectRoot}/tree-sitter-wasm
