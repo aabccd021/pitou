@@ -27,10 +27,12 @@
 
     in
     {
-      devShell.x86_64-linux = mkShellNoCC {
+      devShell.x86_64-linux = mkShell {
         buildInputs = [
           bun
           npm
+          imagemagick
+          tree-sitter
           (writeShellScriptBin "run" ''
             bun run ${projectRoot}/src/index.ts "$@"
           '')
@@ -49,6 +51,8 @@
         shellHook = ''
           ${setupNodeModules}
           export PATH=node_modules/.bin:$PATH
+
+          echo ${tree-sitter-grammars.tree-sitter-json}
 
           rm -rf ${projectRoot}/tree-sitter-wasm
           mkdir ${projectRoot}/tree-sitter-wasm
