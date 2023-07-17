@@ -26,7 +26,7 @@ const blogHeader = header({
   }, [
     img({
       src: staticUrl("/logo.png"),
-      width: "40rem"
+      width: "33"
     }),
     p({}, [
       "functionhero"

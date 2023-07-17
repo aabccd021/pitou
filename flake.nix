@@ -28,7 +28,7 @@
         tree-sitter-typescript = true;
       };
 
-      page = { runFile, dependencies ? [], outFile }: stdenv.mkDerivation {
+      page = { runFile, dependencies ? [ ], outFile }: stdenv.mkDerivation {
         name = "page" + runFile;
         src = filter {
           root = ./src;
@@ -73,19 +73,18 @@
       };
 
 
-      logo = stdenv.mkDerivation
-        {
-          name = "logo";
-          dontUnpack = true;
-          nativeBuildInputs = [ imagemagick ];
-          buildPhase = ''
-            convert -background none ${./src/public/logo.svg} logo.png
-          '';
-          installPhase = ''
-            mkdir -p $out/public
-            cp logo.png $out/public
-          '';
-        };
+      logo = stdenv.mkDerivation {
+        name = "logo";
+        dontUnpack = true;
+        nativeBuildInputs = [ imagemagick ];
+        buildPhase = ''
+          convert -background none ${./src/public/logo.svg} logo.png
+        '';
+        installPhase = ''
+          mkdir -p $out/public
+          cp logo.png $out/public
+        '';
+      };
 
     in
     {
