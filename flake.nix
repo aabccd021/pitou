@@ -32,7 +32,6 @@
           bun
           npm
           imagemagick
-          tree-sitter
           (writeShellScriptBin "run" ''
             bun run ${projectRoot}/src/index.ts "$@"
           '')
@@ -51,8 +50,6 @@
         shellHook = ''
           ${setupNodeModules}
           export PATH=node_modules/.bin:$PATH
-
-          echo ${tree-sitter.grammars}
 
           rm -rf ${projectRoot}/tree-sitter-wasm
           mkdir ${projectRoot}/tree-sitter-wasm
