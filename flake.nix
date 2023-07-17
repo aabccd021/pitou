@@ -53,23 +53,22 @@
       htmlYo = stdenv.mkDerivation {
         name = "htmlYo";
         src = filter {
-          root = ./.;
+          root = ./src;
           include = [
-            "./src/blog/index.html.ts"
-            "./src/style.css.ts"
-            "./src/meta.ts"
-            "./src/html.ts"
-            "./src/staticUrl.ts"
+            "./blog/index.html.ts"
+            "./style.css.ts"
+            "./meta.ts"
+            "./html.ts"
+            "./staticUrl.ts"
           ];
         };
         configurePhase = ''
-          cp -r $src .
+          mkdir -p ./src
+          cp -r $src/. ./src
           ln -sfn ${nodeModules}/lib/node_modules ./node_modules
         '';
         buildPhase = ''
           file_path="./src/blog/index.html.ts"
-
-          echo a
 
           if [ ! -f "$file_path" ]; then
             echo "File does not exist: $file_path"
@@ -84,8 +83,6 @@
           cp index.html $out/public
         '';
       };
-
-
 
       logo = stdenv.mkDerivation
         {
