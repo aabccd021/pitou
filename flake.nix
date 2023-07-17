@@ -63,6 +63,16 @@
         outFile = "./index.html";
       };
 
+      cssYo = page {
+        runFile = "blog/style.css.ts";
+        dependencies = [
+          "style.ts"
+          "cssUtil.ts"
+        ];
+        outFile = "./style.css";
+      };
+
+
       logo = stdenv.mkDerivation
         {
           name = "logo";
@@ -108,6 +118,7 @@
           mkdir public
           cp -r ${logo}/public/. public
           cp -r ${htmlYo}/public/. public
+          cp -r ${cssYo}/public/. public
         '';
         installPhase = ''
           mkdir $out

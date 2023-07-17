@@ -137,7 +137,7 @@ export const postlistLink = a({
   display: "block"
 });
 
-export const skip = [
+export const skip: SelectedClass[] = [
   {
     properties: {
       width: "1px",
