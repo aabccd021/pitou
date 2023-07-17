@@ -33,9 +33,9 @@ export const toText = (classes: SelectedClass[]): string => {
 
       const propertiesStr = Object
         .entries(cls.properties)
-        .map(([ key, value ]) => `\n  ${key}: ${value};`)
+        .map(([ key, value ]) => `  ${key}: ${value};`)
         .sort()
-        .join("");
+        .join("\n");
 
       const selectorStr = cls.selector ?? "";
 
@@ -49,7 +49,7 @@ export const toText = (classes: SelectedClass[]): string => {
       return classDef;
 
     })
-    .join("\n");
+    .join("\n\n");
 
 };
 
