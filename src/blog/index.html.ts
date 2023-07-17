@@ -12,7 +12,7 @@ import {
   metas
 } from "../meta";
 
-import * as style from "../style.css";
+import * as style from "../style";
 
 const blogHeader = header({
   class: classNameOf(style.header)

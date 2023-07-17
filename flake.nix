@@ -54,7 +54,7 @@
       htmlYo = page {
         runFile = "blog/index.html.ts";
         dependencies = [
-          "style.css.ts"
+          "style.ts"
           "meta.ts"
           "html.ts"
           "staticUrl.ts"
