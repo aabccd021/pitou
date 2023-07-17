@@ -29,7 +29,7 @@ const blogHeader = (env: Env) => header({
       width: "33"
     }),
     p({}, [
-      "dvhero.blog"
+      "devhero.blog"
     ])
   ]),
 

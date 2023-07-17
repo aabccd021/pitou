@@ -39,13 +39,19 @@ if (typeof importResult.content !== "function") {
 export const env: Env = {
   staticUrl: (requestedUrl) => {
 
-    const file = Bun.file(`./public/${requestedUrl}`);
-    if (file.size <= 0) {
+    if (Bun.file(`./public/${requestedUrl}`).size > 0) {
 
-      throw new Error(`Unknown static url: ${requestedUrl}`);
+      return requestedUrl;
 
     }
-    return requestedUrl;
+
+    if (Bun.file(`./public/${requestedUrl}index.html`).size > 0) {
+
+      return requestedUrl;
+
+    }
+
+    throw new Error(`Unknown static url: ${requestedUrl}`);
 
   }
 };
