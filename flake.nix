@@ -80,6 +80,7 @@
           "meta.ts"
           "html.ts"
           "staticUrl.ts"
+          "cssUtil.ts"
         ];
         outFile = "./index.html";
       };

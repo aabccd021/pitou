@@ -1,4 +1,7 @@
 import {
+  classNameOf
+} from "../cssUtil";
+import {
   a,
   div,
   elementToString, h1, html, img, li, main, nav, picture, source, time, ul, header, p
@@ -12,11 +15,11 @@ import {
 import * as style from "../style.css";
 
 const blogHeader = header({
-  class: style.header.name
+  class: classNameOf(style.header)
 }, [
 
   div({
-    class: style.title.name
+    class: classNameOf(style.title)
   }, [
     img({
       src: "/logo.png",
@@ -28,11 +31,11 @@ const blogHeader = header({
   ]),
 
   nav({
-    class: style.nav.name
+    class: classNameOf(style.nav)
   }, [
 
     a({
-      class: style.navItem.name,
+      class: classNameOf(style.navItem),
       href: "/",
       "aria-current": "page"
     }, [
@@ -41,14 +44,14 @@ const blogHeader = header({
 
 
     a({
-      class: style.navItem.name,
+      class: classNameOf(style.navItem),
       href: "/tags/"
     }, [
       "Tags"
     ]),
 
     a({
-      class: style.navItem.name,
+      class: classNameOf(style.navItem),
       href: "/about/"
     }, [
       "About Me"
@@ -56,7 +59,7 @@ const blogHeader = header({
 
 
     a({
-      class: style.navItem.name,
+      class: classNameOf(style.navItem),
       href: "/feed/feed.xml",
       rel: "alternate",
       type: "application/rss+xml"
@@ -70,27 +73,27 @@ const blogHeader = header({
 
 const page = html({
   lang: "en",
-  class: style.html.name
+  class: classNameOf(style.html)
 }, [
   ...metas,
   a({
-    class: style.skip.name
+    class: classNameOf(style.skip)
   }, [
     "Skip to main content"
   ]),
   blogHeader,
   main({
     id: "main",
-    class: style.main.name
+    class: classNameOf(style.main)
   }, [
     h1({}, [
       "Posts"
     ]),
     ul({
-      class: style.postlist.name
+      class: classNameOf(style.postlist)
     }, [
       li({
-        class: style.postlistItem.name
+        class: classNameOf(style.postlistItem)
       }, [
         picture({}, [
           source({
@@ -102,7 +105,7 @@ const page = html({
             type: "image/webp"
           }),
           img({
-            class: style.postListItemImage.name,
+            class: classNameOf(style.postListItemImage),
             src: "/img/BMWTtZw5Gk-1200.svg",
             alt: "command to create new GitHub repository",
             decoding: "async",
@@ -113,14 +116,14 @@ const page = html({
         ]),
 
         a({
-          class: style.postlistLink.name,
+          class: classNameOf(style.postlistLink),
           href: "/blog/create-new-github-repository-from-cli-with-gh-command/"
         }, [
           "Create new GitHub repository from CLI with gh command"
         ]),
 
         time({
-          class: style.postlistDate.name,
+          class: classNameOf(style.postlistDate),
           datetime: "2023-02-05"
         }, [
           "5 February 2023"

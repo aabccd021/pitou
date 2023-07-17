@@ -1,94 +1,12 @@
-import type * as CSS from "csstype";
 import {
-  createHash
-} from "node:crypto";
-import {
-  stringify
-} from "safe-stable-stringify";
-
-type Properties = CSS.StandardPropertiesHyphen;
-
-interface SelectedClass {
-  media?: string;
-  selector?: CSS.Pseudos | (string & NonNullable<unknown>);
-  properties: Properties;
-}
-
-interface CompiledCls {
-  name: string;
-  classes: SelectedClass[];
-}
-
-const classNameOf = (param: unknown): string => {
-
-  const str = stringify(param) ?? "";
-  const hash = createHash("md5")
-    .update(str)
-    .digest("hex");
-
-  // css class name must start with a letter
-  return `gen-${hash}`;
-
-};
-
-const mkPropertiesStr = (properties: Properties): string => {
-
-  const propertiesStr = Object
-    .entries(properties)
-    .map(([ key, value ]) => `\n  ${key}: ${value};`)
-    .sort()
-    .join("");
-
-  return `{${propertiesStr}\n}`;
-
-};
-
-const cls = (properties: Properties): CompiledCls => {
-
-  const name = classNameOf(properties);
-  // const propertiesStr = mkPropertiesStr(properties);
-  const classes = [ {
-    properties
-  } ];
+  Properties,
+  SelectedClass
+} from "./cssUtil";
 
 
-  return {
-    name,
-    classes
-    // text: `.${name} ${propertiesStr}`
-  };
-
-};
-
-const pcls = (classes: SelectedClass[]): CompiledCls => {
-
-  const name = classNameOf(classes);
-
-  /*
-   * const text = selectorProperties
-   *   .map((spec) => {
-   *
-   *     const propertiesStr = mkPropertiesStr(spec.properties);
-   *     const selectorStr = spec.selector ?? "";
-   *     const classDef = `.${name}${selectorStr} ${propertiesStr}`;
-   *     if (spec.media !== undefined) {
-   *
-   *       return `@media ${spec.media} {\n.${classDef}\n}`;
-   *
-   *     }
-   *     return classDef;
-   *
-   *   })
-   *   .join("\n");
-   */
-
-  return {
-    name,
-    classes
-  };
-
-};
-
+const cls = (properties: Properties): SelectedClass[] => [ {
+  properties
+} ];
 
 const textColor = "#ddc7a1";
 const textColorLink = "#7daea3";
@@ -202,13 +120,11 @@ const a = (properties: Properties): SelectedClass[] => [
   }
 ];
 
-export const navItem = pcls(
-  a({
-    display: "inline-block"
-  })
-);
+export const navItem = a({
+  display: "inline-block"
+});
 
-export const postlistLink = pcls(a({
+export const postlistLink = a({
   color: textColorLink,
   "text-underline-offset": ".3em",
   "margin-bottom": ".3em",
@@ -219,9 +135,9 @@ export const postlistLink = pcls(a({
   "line-height": 2,
   "text-decoration-thickness": "1px",
   display: "block"
-}));
+});
 
-export const skip = pcls([
+export const skip = [
   {
     properties: {
       width: "1px",
@@ -240,5 +156,5 @@ export const skip = pcls([
       position: "static"
     }
   }
-]);
+];
 
