@@ -38,16 +38,16 @@
           mkdir -p ./src
           cp -r $src/. ./src
 
-          file_path=./src/${runFile}
-          if [ ! -f $file_path ]; then
-            echo File does not exist: $file_path
-            exit 1
-          fi
-
           ln -sfn ${nodeModules}/lib/node_modules ./node_modules
 
-          mkdir -p $out/public
-          ${bun}/bin/bun run $file_path > $out/public/${outFile}
+          cp ${./src/generate.ts} generate.ts
+
+          PATH_TO_GENERATE=./src/${runFile} ${bun}/bin/bun run generate.ts
+
+        '';
+        installPhase = ''
+          mkdir -p $out/public/$(dirname ${outFile})
+          cp result $out/public/${outFile}
         '';
       };
 

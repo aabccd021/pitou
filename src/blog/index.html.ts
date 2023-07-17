@@ -29,7 +29,7 @@ const blogHeader = header({
       width: "33"
     }),
     p({}, [
-      "functionhero"
+      "devhero.blog"
     ])
   ]),
 
@@ -141,8 +141,6 @@ const page = html({
 
 const elementHtmlString = elementToString(page);
 
-const htmlString = `<!DOCTYPE html>${elementHtmlString}`;
-
-process.stdout.write(htmlString);
+export const content = `<!DOCTYPE html>${elementHtmlString}`;
 
 

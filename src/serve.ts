@@ -1,8 +1,13 @@
 import serveStatic from "serve-static-bun";
+import {
+  withHtmlLiveReload
+} from "./hot";
 
 console.log("Serving on http://localhost:3000");
 
-Bun.serve({
+export default withHtmlLiveReload({
   development: true,
-  fetch: serveStatic("result/public")
+  fetch: (req) => {
+    serveStatic("result/public")(req)
+  }
 });
