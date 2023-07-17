@@ -50,38 +50,38 @@
         '';
       };
 
-      htmlYo = stdenv.mkDerivation {
-        name = "htmlYo";
+      page = { runFile, dependencies ? [], outFile }: stdenv.mkDerivation {
+        name = "page" + runFile;
         src = filter {
           root = ./src;
-          include = [
-            "./blog/index.html.ts"
-            "./style.css.ts"
-            "./meta.ts"
-            "./html.ts"
-            "./staticUrl.ts"
-          ];
+          include = dependencies ++ [ runFile ];
         };
-        configurePhase = ''
+        buildPhase = ''
           mkdir -p ./src
           cp -r $src/. ./src
-          ln -sfn ${nodeModules}/lib/node_modules ./node_modules
-        '';
-        buildPhase = ''
-          file_path="./src/blog/index.html.ts"
 
-          if [ ! -f "$file_path" ]; then
-            echo "File does not exist: $file_path"
+          file_path=./src/${runFile}
+          if [ ! -f $file_path ]; then
+            echo File does not exist: $file_path
             exit 1
           fi
 
-          ${bun}/bin/bun run "$file_path" > index.html
-          cat index.html
-        '';
-        installPhase = ''
+          ln -sfn ${nodeModules}/lib/node_modules ./node_modules
+
           mkdir -p $out/public
-          cp index.html $out/public
+          ${bun}/bin/bun run $file_path > $out/public/${outFile}
         '';
+      };
+
+      htmlYo = page {
+        runFile = "blog/index.html.ts";
+        dependencies = [
+          "style.css.ts"
+          "meta.ts"
+          "html.ts"
+          "staticUrl.ts"
+        ];
+        outFile = "./index.html";
       };
 
       logo = stdenv.mkDerivation
