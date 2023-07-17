@@ -2,6 +2,9 @@ import {
   classNameOf
 } from "../cssUtil";
 import {
+  Env
+} from "../env";
+import {
   a,
   div,
   elementToString, h1, html, img, li, main, nav, picture, source, time, ul, header, p
@@ -11,13 +14,10 @@ import {
 import {
   metas
 } from "../meta";
-import {
-  staticUrl
-} from "../staticUrl";
 
 import * as style from "../style";
 
-const blogHeader = header({
+const blogHeader = (env: Env) => header({
   class: classNameOf(style.header)
 }, [
 
@@ -25,11 +25,11 @@ const blogHeader = header({
     class: classNameOf(style.title)
   }, [
     img({
-      src: staticUrl("/logo.png"),
+      src: env.staticUrl("/logo.png"),
       width: "33"
     }),
     p({}, [
-      "devhero.blog"
+      "dvhero.blog"
     ])
   ]),
 
@@ -74,17 +74,17 @@ const blogHeader = header({
 
 ]);
 
-const page = html({
+const page = (env: Env) => html({
   lang: "en",
   class: classNameOf(style.html)
 }, [
-  ...metas,
+  ...metas(env),
   a({
     class: classNameOf(style.skip)
   }, [
     "Skip to main content"
   ]),
-  blogHeader,
+  blogHeader(env),
   main({
     id: "main",
     class: classNameOf(style.main)
@@ -139,8 +139,12 @@ const page = html({
 
 ]);
 
-const elementHtmlString = elementToString(page);
 
-export const content = `<!DOCTYPE html>${elementHtmlString}`;
+export const content = (env: Env) => {
+
+  const elementHtmlString = elementToString(page(env));
+  return `<!DOCTYPE html>${elementHtmlString}`;
+
+};
 
 

@@ -3,12 +3,14 @@ import {
   withHtmlLiveReload
 } from "./hot";
 
-interface Module {
-  import: () => Promise<{ content: string }>;
+type ModuleImport<E> = () => Promise<{ content: (env: E) => string }>;
+
+interface Module<E> {
+  import: ModuleImport<E>;
   options?: ResponseInit;
 }
 
-export const html = (imports: () => Promise<{ content: string }>): Module => ({
+export const html = <E>(imports: ModuleImport<E>): Module<E> => ({
   import: imports,
   options: {
     headers: {
@@ -17,7 +19,7 @@ export const html = (imports: () => Promise<{ content: string }>): Module => ({
   }
 });
 
-export const css = (imports: () => Promise<{ content: string }>): Module => ({
+export const css = <E>(imports: ModuleImport<E>): Module<E> => ({
   import: imports,
   options: {
     headers: {
@@ -27,7 +29,11 @@ export const css = (imports: () => Promise<{ content: string }>): Module => ({
 });
 
 
-const makeReloadable = async (modules: Record<string, Module>, request: Request): Promise<Response | undefined> => {
+const makeReloadable = async <E>(
+  env: E,
+  modules: Record<string, Module<E>>,
+  request: Request
+): Promise<Response | undefined> => {
 
   const path = new URL(request.url).pathname;
 
@@ -43,16 +49,16 @@ const makeReloadable = async (modules: Record<string, Module>, request: Request)
     content
   } = await module.import();
 
-  return new Response(content, module.options);
+  return new Response(content(env), module.options);
 
 };
 
 
-export const makeDev = (modules: Record<string, Module>) => withHtmlLiveReload({
+export const makeDev = <E>(env: E, modules: Record<string, Module<E>>) => withHtmlLiveReload({
   development: true,
   fetch: async (request) => {
 
-    const hotReloadable = await makeReloadable(modules, request);
+    const hotReloadable = await makeReloadable(env, modules, request);
     if (hotReloadable) {
 
       return hotReloadable;

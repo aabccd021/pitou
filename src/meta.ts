@@ -1,11 +1,11 @@
 import {
+  Env
+} from "./env";
+import {
   link, meta, script, title
 } from "./html";
-import {
-  staticUrl
-} from "./staticUrl";
 
-export const metas = [
+export const metas = (env: Env) => [
   link({
     href: "/favicon.ico",
     rel: "icon"
@@ -114,7 +114,7 @@ export const metas = [
     type: "application/json"
   }),
   link({
-    href: staticUrl("/style.css"),
+    href: env.staticUrl("/style.css"),
     rel: "stylesheet"
   }),
   script({

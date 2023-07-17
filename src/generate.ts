@@ -1,3 +1,7 @@
+import {
+  Env
+} from "./env";
+
 const pathToGenerate = process.env["PATH_TO_GENERATE"];
 
 if (!pathToGenerate) {
@@ -26,11 +30,32 @@ if (!("content" in importResult)) {
 
 }
 
-if (typeof importResult.content !== "string") {
+if (typeof importResult.content !== "function") {
+
+  throw new Error("exported object property `content` is not a function");
+
+}
+
+export const env: Env = {
+  staticUrl: (requestedUrl) => {
+
+    const file = Bun.file(`./public/${requestedUrl}`);
+    if (file.size <= 0) {
+
+      throw new Error(`Unknown static url: ${requestedUrl}`);
+
+    }
+    return requestedUrl;
+
+  }
+};
+
+const content: unknown = importResult.content(env);
+
+if (typeof content !== "string") {
 
   throw new Error("exported object property `content` is not a string");
 
 }
 
-
-await Bun.write("result", importResult.content);
+await Bun.write("result", content);
