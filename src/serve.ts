@@ -1,11 +1,6 @@
 import serveStatic from "serve-static-bun";
-import {
-  write
-} from "./generate";
 
-await write();
-
-console.log("aab");
+console.log("Serving on http://localhost:3000");
 
 Bun.serve({
   development: true,

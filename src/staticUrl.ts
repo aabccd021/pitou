@@ -1,11 +1,12 @@
-export const staticFiles = {
-  indexHtml: "/index.html",
-  styleCss: "/style.css"
-} satisfies Record<string, string>;
+export const staticFiles = [
+  "/index.html",
+  "/style.css",
+  "/logo.png"
+] as const;
 
-export const makeStaticUrl = (staticFilesDef: Record<string, string>) => (requestedUrl: string) => {
+export const makeStaticUrl = <T extends string>(filesDef: readonly T[]) => (requestedUrl: T) => {
 
-  const files = Object.values(staticFilesDef);
+  const files: readonly string[] = filesDef;
 
   if (files.includes(requestedUrl)) {
 
