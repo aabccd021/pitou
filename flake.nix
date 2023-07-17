@@ -25,6 +25,42 @@
         tree-sitter-typescript = true;
       };
 
+      htmls = stdenv.mkDerivation {
+        name = "pitou";
+        src = ./src;
+        unpackPhase = ''
+          cp -r "$src" ./src
+          cp ${./package.json} ./package.json
+        '';
+        configurePhase = setupNodeModules;
+        buildPhase = ''
+          ${bun}/bin/bun build ./src/index.ts --splitting --target browser --outdir ./dist
+        '';
+        installPhase = ''
+          mkdir -p $out/dist
+          cp -r dist $out
+
+          mkdir -p $out/tree-sitter-wasm
+          while read wasmDir
+          do cp -r $wasmDir/. $out/tree-sitter-wasm/
+          done < ${treeSitterWasms}
+        '';
+      };
+
+      logo = stdenv.mkDerivation
+        {
+          name = "logo";
+          dontUnpack = true;
+          nativeBuildInputs = [ imagemagick ];
+          buildPhase = ''
+            convert ${./src/public/logo.svg} logo.png
+          '';
+          installPhase = ''
+            mkdir -p $out/public
+            cp logo.png $out/public
+          '';
+        };
+
     in
     {
       devShell.x86_64-linux = mkShell {
@@ -60,24 +96,15 @@
       };
 
       packages.x86_64-linux.default = stdenv.mkDerivation {
-        name = "pitou";
-        src = ./src;
-        unpackPhase = ''
-          cp -r "$src" ./src
-          cp ${./package.json} ./package.json
-        '';
-        configurePhase = setupNodeModules;
+        name = "public";
+        dontUnpack = true;
         buildPhase = ''
-          ${bun}/bin/bun build ./src/index.ts --splitting --target browser --outdir ./dist
+          mkdir public
+          cp -r ${logo}/public/. public
         '';
         installPhase = ''
-          mkdir -p $out/dist
-          cp -r dist $out
-
-          mkdir -p $out/tree-sitter-wasm
-          while read wasmDir
-          do cp -r $wasmDir/. $out/tree-sitter-wasm/
-          done < ${treeSitterWasms}
+          mkdir $out
+          cp -r public $out
         '';
       };
     };
