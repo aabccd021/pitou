@@ -10,11 +10,11 @@
 
       filter = inputs.nix-filter.lib;
 
-      nodeModules = import ./npm2nix.nix pkgs ./package-lock.json;
+      nodeModules = import ./nix/npm2nix.nix pkgs ./package-lock.json;
 
       nodeModulesDir = "$(${npm}/bin/npm root)";
 
-      npm = import ./packageOnlyNpm.nix pkgs;
+      npm = import ./nix/packageOnlyNpm.nix pkgs;
 
       projectRoot = "$(${git}/bin/git rev-parse --show-toplevel)";
 
@@ -22,7 +22,7 @@
         ln -sfn ${nodeModules}/lib/node_modules ${nodeModulesDir}
       '';
 
-      treeSitterWasms = import ./tree-sitter-wasm.nix pkgs {
+      treeSitterWasms = import ./nix/tree-sitter-wasm.nix pkgs {
         tree-sitter-javascript = true;
         tree-sitter-nix = true;
         tree-sitter-typescript = true;
