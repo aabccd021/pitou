@@ -29,9 +29,8 @@ export const header = cls({
   "flex-wrap": "wrap",
   "justify-content": "center",
   "align-items": "center",
-  gap: "0 5em",
-  margin: ".5em",
-  padding: ".5em",
+  gap: "0em 5em",
+  "padding-bottom": "0.5em",
   display: "flex"
 });
 
@@ -40,21 +39,15 @@ export const main = cls({
 });
 
 export const title = cls({
-  "flex-wrap": "wrap",
   "align-items": "center",
-  gap: "1em .8em",
-  margin: 0,
-  padding: 0,
+  gap: ".5em",
   "font-size": "1.3em",
-  "font-weight": 900,
-  "line-height": 1,
+  "font-weight": 600,
   display: "flex"
 });
 
 export const nav = cls({
   gap: "1em",
-  margin: 0,
-  padding: "1em 0",
   display: "flex"
 });
 

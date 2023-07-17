@@ -103,7 +103,8 @@ export const withHtmlLiveReload = <
         req, server
       );
 
-      if (response.headers.get("Content-Type") !== "text/html") {
+      if (response.headers.get("Content-Type")
+        ?.includes("text/html") !== true) {
 
         return response;
 

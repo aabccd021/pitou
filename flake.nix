@@ -100,10 +100,6 @@
             cd ${projectRoot}
             bun --hot ${projectRoot}/src/dev.ts "$@"
           '')
-          (writeShellScriptBin "serve" ''
-            cd ${projectRoot}
-            bun run ${projectRoot}/src/serve.ts "$@"
-          '')
           (writeShellScriptBin "lint" ''
             eslint ${projectRoot} --ignore-path ${projectRoot}/.gitignore --max-warnings 0 "$@"
           '')
