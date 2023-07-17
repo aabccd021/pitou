@@ -11,6 +11,9 @@ import {
 import {
   metas
 } from "../meta";
+import {
+  staticUrl
+} from "../staticUrl";
 
 import * as style from "../style";
 
@@ -22,7 +25,7 @@ const blogHeader = header({
     class: classNameOf(style.title)
   }, [
     img({
-      src: "/logo.png",
+      src: staticUrl("/logo.png"),
       width: "40rem"
     }),
     p({}, [
