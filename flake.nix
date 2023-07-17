@@ -28,28 +28,6 @@
         tree-sitter-typescript = true;
       };
 
-      htmls = stdenv.mkDerivation {
-        name = "pitou";
-        src = ./src;
-        unpackPhase = ''
-          cp -r "$src" ./src
-          cp ${./package.json} ./package.json
-        '';
-        configurePhase = setupNodeModules;
-        buildPhase = ''
-          ${bun}/bin/bun build ./src/index.ts --splitting --target browser --outdir ./dist
-        '';
-        installPhase = ''
-          mkdir -p $out/dist
-          cp -r dist $out
-
-          mkdir -p $out/tree-sitter-wasm
-          while read wasmDir
-          do cp -r $wasmDir/. $out/tree-sitter-wasm/
-          done < ${treeSitterWasms}
-        '';
-      };
-
       page = { runFile, dependencies ? [], outFile }: stdenv.mkDerivation {
         name = "page" + runFile;
         src = filter {
@@ -109,10 +87,6 @@
           (writeShellScriptBin "run" ''
             bun run ${projectRoot}/src/index.ts "$@"
           '')
-          (writeShellScriptBin "dist" ''
-            cd ${projectRoot}
-            nix build --offline && bun run result/dist/index.js
-          '')
           (writeShellScriptBin "dev" ''
             cd ${projectRoot}
             bun --hot ${projectRoot}/src/dev.ts "$@"
@@ -124,12 +98,6 @@
         shellHook = ''
           ${setupNodeModules}
           export PATH=node_modules/.bin:$PATH
-
-          # rm -rf ${projectRoot}/tree-sitter-wasm
-          # mkdir ${projectRoot}/tree-sitter-wasm
-          # while read wasmDir
-          # do cp -rs "$wasmDir/." "${projectRoot}/tree-sitter-wasm/"
-          # done < ${treeSitterWasms}
         '';
       };
 
