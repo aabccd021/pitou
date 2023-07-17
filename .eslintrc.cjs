@@ -71,7 +71,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-use-before-define': 'error',
     '@typescript-eslint/no-useless-constructor': 'error',
-    '@typescript-eslint/object-curly-spacing': 'error',
+    '@typescript-eslint/object-curly-spacing': [ 'error', 'always' ],
     '@typescript-eslint/padding-line-between-statements': 'error',
     '@typescript-eslint/quotes': 'error',
     '@typescript-eslint/require-await': 'error',
