@@ -21,12 +21,12 @@ interface CompiledCls {
 
 const classNameOf = (param: unknown): string => {
 
-  const hash = stringify(param) ?? "";
-  // const hash = createHash("md5")
-  //   .update(str)
-  //   .digest("hex");
+  const str = stringify(param) ?? "";
+  const hash = createHash("md5")
+    .update(str)
+    .digest("hex");
 
-  // class name must start with a letter
+  // css class name must start with a letter
   return `gen-${hash}`;
 
 };
