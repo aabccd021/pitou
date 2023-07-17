@@ -6,19 +6,25 @@ import {
   stringify
 } from "safe-stable-stringify";
 
-interface CompiledCls {
-  name: string;
-  text: string;
-}
-
 type Properties = CSS.StandardPropertiesHyphen;
 
-const getClassName = (param: unknown): string => {
+interface SelectedClass {
+  media?: string;
+  selector?: CSS.Pseudos | (string & NonNullable<unknown>);
+  properties: Properties;
+}
 
-  const str = stringify(param) ?? "";
-  const hash = createHash("md5")
-    .update(str)
-    .digest("hex");
+interface CompiledCls {
+  name: string;
+  classes: SelectedClass[];
+}
+
+const classNameOf = (param: unknown): string => {
+
+  const hash = stringify(param) ?? "";
+  // const hash = createHash("md5")
+  //   .update(str)
+  //   .digest("hex");
 
   // class name must start with a letter
   return `gen-${hash}`;
@@ -39,46 +45,46 @@ const mkPropertiesStr = (properties: Properties): string => {
 
 const cls = (properties: Properties): CompiledCls => {
 
-  const name = getClassName(properties);
-  const propertiesStr = mkPropertiesStr(properties);
+  const name = classNameOf(properties);
+  // const propertiesStr = mkPropertiesStr(properties);
+  const classes = [ {
+    properties
+  } ];
 
 
   return {
     name,
-    text: `.${name} ${propertiesStr}`
+    classes
+    // text: `.${name} ${propertiesStr}`
   };
 
 };
 
-interface SelectedClass {
-  media?: string;
-  selector?: CSS.Pseudos | (string & NonNullable<unknown>);
-  properties: Properties;
-}
+const pcls = (classes: SelectedClass[]): CompiledCls => {
 
-const pcls = (selectorProperties: SelectedClass[]): CompiledCls => {
+  const name = classNameOf(classes);
 
-  const name = getClassName(selectorProperties);
-
-  const text = selectorProperties
-    .map((spec) => {
-
-      const propertiesStr = mkPropertiesStr(spec.properties);
-      const selectorStr = spec.selector ?? "";
-      const classDef = `.${name}${selectorStr} ${propertiesStr}`;
-      if (spec.media !== undefined) {
-
-        return `@media ${spec.media} {\n.${classDef}\n}`;
-
-      }
-      return classDef;
-
-    })
-    .join("\n");
+  /*
+   * const text = selectorProperties
+   *   .map((spec) => {
+   *
+   *     const propertiesStr = mkPropertiesStr(spec.properties);
+   *     const selectorStr = spec.selector ?? "";
+   *     const classDef = `.${name}${selectorStr} ${propertiesStr}`;
+   *     if (spec.media !== undefined) {
+   *
+   *       return `@media ${spec.media} {\n.${classDef}\n}`;
+   *
+   *     }
+   *     return classDef;
+   *
+   *   })
+   *   .join("\n");
+   */
 
   return {
     name,
-    text
+    classes
   };
 
 };

@@ -1,11 +1,14 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nix-filter.url = "github:numtide/nix-filter";
   };
 
   outputs = inputs: with inputs.nixpkgs.legacyPackages.x86_64-linux;
     let
       pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+
+      filter = inputs.nix-filter.lib;
 
       nodeModules = import ./npm2nix.nix pkgs ./package-lock.json;
 
@@ -47,6 +50,43 @@
         '';
       };
 
+      htmlYo = stdenv.mkDerivation {
+        name = "htmlYo";
+        src = filter {
+          root = ./.;
+          include = [
+            "./src/blog/index.html.ts"
+            "./src/style.css.ts"
+            "./src/meta.ts"
+            "./src/html.ts"
+            "./src/staticUrl.ts"
+          ];
+        };
+        configurePhase = ''
+          cp -r $src .
+          ln -sfn ${nodeModules}/lib/node_modules ./node_modules
+        '';
+        buildPhase = ''
+          file_path="./src/blog/index.html.ts"
+
+          echo a
+
+          if [ ! -f "$file_path" ]; then
+            echo "File does not exist: $file_path"
+            exit 1
+          fi
+
+          ${bun}/bin/bun run "$file_path" > index.html
+          cat index.html
+        '';
+        installPhase = ''
+          mkdir -p $out/public
+          cp index.html $out/public
+        '';
+      };
+
+
+
       logo = stdenv.mkDerivation
         {
           name = "logo";
@@ -87,11 +127,11 @@
           ${setupNodeModules}
           export PATH=node_modules/.bin:$PATH
 
-          rm -rf ${projectRoot}/tree-sitter-wasm
-          mkdir ${projectRoot}/tree-sitter-wasm
-          while read wasmDir
-          do cp -rs "$wasmDir/." "${projectRoot}/tree-sitter-wasm/"
-          done < ${treeSitterWasms}
+          # rm -rf ${projectRoot}/tree-sitter-wasm
+          # mkdir ${projectRoot}/tree-sitter-wasm
+          # while read wasmDir
+          # do cp -rs "$wasmDir/." "${projectRoot}/tree-sitter-wasm/"
+          # done < ${treeSitterWasms}
         '';
       };
 
@@ -101,6 +141,7 @@
         buildPhase = ''
           mkdir public
           cp -r ${logo}/public/. public
+          cp -r ${htmlYo}/public/. public
         '';
         installPhase = ''
           mkdir $out

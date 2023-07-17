@@ -9,5 +9,5 @@ console.log("aab");
 
 Bun.serve({
   development: true,
-  fetch: serveStatic("public")
+  fetch: serveStatic("result/public")
 });

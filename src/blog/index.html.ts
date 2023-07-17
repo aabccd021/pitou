@@ -8,6 +8,7 @@ import {
 import {
   metas
 } from "../meta";
+
 import * as style from "../style.css";
 
 const blogHeader = header({
@@ -134,6 +135,8 @@ const page = html({
 
 const elementHtmlString = elementToString(page);
 
-export const htmlString = `<!DOCTYPE html>${elementHtmlString}`;
+const htmlString = `<!DOCTYPE html>${elementHtmlString}`;
+
+process.stdout.write(htmlString);
 
 
