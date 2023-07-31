@@ -1,6 +1,6 @@
 import {
   staticUrl
-} from "./env";
+} from "./staticUrls";
 import {
   link, meta, script, title
 } from "./html";

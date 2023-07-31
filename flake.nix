@@ -85,7 +85,7 @@
           "style.ts"
           "meta.ts"
           "html.ts"
-          "env.ts"
+          "staticUrls.ts"
           "cssUtil.ts"
         ];
         outFile = "./index.html";

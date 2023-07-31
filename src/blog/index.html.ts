@@ -3,7 +3,7 @@ import {
 } from "../cssUtil";
 import {
   staticUrl
-} from "../env";
+} from "../staticUrls";
 import {
   a,
   div,
