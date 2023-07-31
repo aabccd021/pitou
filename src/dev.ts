@@ -6,8 +6,6 @@ import {
 
 
 export default makeDev({
-  staticUrl: (requestedUrl) => requestedUrl
-}, {
   "/": html(() => import("./blog/index.html")),
   "/style.css": css(() => import("./blog/style.css"))
 });

@@ -31,7 +31,6 @@
       page =
         { runFile
         , outFile
-        , dependencies ? [ ]
         , requiredFiles ? [ ]
         }: stdenv.mkDerivation {
           name = "page-" + runFile;
@@ -41,7 +40,6 @@
           };
           buildPhase = ''
             mkdir public
-            ${builtins.concatStringsSep "\n" (map (f: "cp -rs ${f}/public/. public") dependencies)}
             mkdir -p ./src
             cp -r $src/. ./src
 
@@ -83,17 +81,17 @@
 
       htmlYo = page {
         runFile = "blog/index.html.ts";
-        dependencies = [ cssYo logo ];
         requiredFiles = [
           "style.ts"
           "meta.ts"
           "html.ts"
-          "staticUrl.ts"
+          "env.ts"
           "cssUtil.ts"
         ];
         outFile = "./index.html";
       };
 
+      staticFiles = [ htmlYo cssYo logo ];
 
     in
     {
@@ -123,6 +121,14 @@
         '';
       };
 
-      packages.x86_64-linux.default = htmlYo;
+      packages.x86_64-linux.default = stdenv.mkDerivation {
+        name = "staticFiles";
+        dontUnpack = true;
+        dontBuild = true;
+        installPhase = ''
+          mkdir -p $out/public
+          ${builtins.concatStringsSep "\n" (map (f: "cp -rs ${f}/public/. $out/public") staticFiles)}
+        '';
+      };
     };
 }

@@ -6,8 +6,6 @@ export const staticFiles = [
 
 type StaticFiles = typeof staticFiles[number];
 
-export interface Env {
-  staticUrl: (requestedUrl: StaticFiles) => string;
-}
+export const staticUrl = (requestedUrl: StaticFiles) => requestedUrl;
 
 
